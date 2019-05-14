@@ -7,8 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.actividad2.R
+import com.example.actividad2.activitys.DescripcionTareaActivity
+import com.example.actividad2.item.Tareas
+import kotlinx.android.synthetic.main.tareas_list.view.*
 
-class AdapterTareas(val context: Context) : RecyclerView.Adapter<AdapterTareas.viewHolder>() {
+class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas>) :
+    RecyclerView.Adapter<AdapterTareas.viewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): viewHolder {
@@ -18,11 +22,20 @@ class AdapterTareas(val context: Context) : RecyclerView.Adapter<AdapterTareas.v
 
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
+        val tarea = conjuntoTareas[position]
+        holder.view.tvNombreTarea.text = tarea.nombreTarea
+        holder.view.tvLugarTarea.text = tarea.lugarTarea
+        holder.view.tvUsuarioTarea.text = tarea.usuarioTarea
 
+        holder.view.setOnClickListener {
+            val intent1 = Intent(context, DescripcionTareaActivity::class.java)
+            intent1.putExtra("tareaDescripcion", tarea.descripcion)
+            context.startActivity(intent1)
+        }
     }
 
     override fun getItemCount(): Int {
-        return 4
+        return conjuntoTareas.size
     }
 
     inner class viewHolder(val view: View) : RecyclerView.ViewHolder(view)
