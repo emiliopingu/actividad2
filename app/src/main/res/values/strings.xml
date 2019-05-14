@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Actividad2</string>
+    <string name="lugar_tarea">Lugar de la tarea:</string>
+    <string name="usuario_tarea">Usuario de la tarea:</string>
+</resources>

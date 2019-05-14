@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="205dp" android:id="@+id/cv" app:cardBackgroundColor="@android:color/background_dark">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp">
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:id="@+id/tvNombreTarea" android:textColor="#FF5722"
+                        android:textSize="24sp" android:textStyle="bold" android:textAlignment="center"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+                <TextView
+                        android:text="@string/lugar_tarea"
+                        android:layout_width="163dp"
+                        android:layout_height="50dp" android:id="@+id/textView9" android:layout_weight="1"
+                        android:textColor="#FF5722" android:textAlignment="center" android:textStyle="italic"
+                        android:textSize="18sp"/>
+                <TextView
+                        android:text="@string/usuario_tarea"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp" android:id="@+id/textView8" android:layout_weight="1"
+                        android:textColor="#FF5722" android:textSize="18sp" android:textStyle="italic"
+                        android:textAlignment="center"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="94dp">
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="84dp" android:id="@+id/tvLugarTarea" android:layout_weight="1"
+                        android:textColor="#FF5722" android:textAlignment="center"/>
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="88dp" android:id="@+id/tvUsuarioTarea" android:layout_weight="1"
+                        android:textColor="#FF5722" android:textAlignment="center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
