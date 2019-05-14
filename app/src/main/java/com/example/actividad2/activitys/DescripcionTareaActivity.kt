@@ -12,12 +12,10 @@ class DescripcionTareaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_descripcion_tarea)
         val description = intent.getStringExtra("tareaDescripcion")
 
-        tvDescripcionTarea.text=description
+        tvDescripcionTarea.text = description
 
 
     }
-
-
 
 
 }
