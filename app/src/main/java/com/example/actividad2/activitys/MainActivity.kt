@@ -6,9 +6,13 @@ import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.InputType
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import com.example.actividad2.R
 import com.example.actividad2.adapter.AdapterTareas
 import com.example.actividad2.item.Tareas
@@ -20,25 +24,56 @@ class MainActivity : AppCompatActivity() {
     val listTareas: MutableList<Tareas> = ArrayList()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-                 val sha:SharedPreferences=getPreferences(Context.MODE_PRIVATE)
-        val valor1:String=sha.getString("problema","vacio")
-        val valor2:String=sha.getString("lugarTarea","vacio")
-        val valor3:String=sha.getString("persona","vacio")
-        val valor4:String=sha.getString("descripcion","vacio")
-        val valor5:String=sha.getString("feccha","vacio")
+        /* val sha: SharedPreferences = getPreferences(Context.MODE_PRIVATE)
+         val valor1: String = sha.getString("problema", "vacio")
+         val valor2: String = sha.getString("lugarTarea", "vacio")
+         val valor3: String = sha.getString("persona", "vacio")
+         val valor4: String = sha.getString("descripcion", "vacio")
+         val valor5: String = sha.getString("feccha", "vacio")
 
-        listTareas.add(Tareas(valor1,valor2,valor3,valor4,valor5))
+         listTareas.add(Tareas(valor1, valor2, valor3, valor4, valor5))*/
 
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
-            val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
-            startActivity(intent1)
+            /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
+            startActivity(intent1)*/
+            val builder = AlertDialog.Builder(this)
+            val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
+            val nombreProblema: EditText = view.findViewById(R.id.etNombreProblema)
+            val lugarTarea: EditText = view.findViewById(R.id.etLugarTarea)
+            val personaTarea: EditText = view.findViewById(R.id.etPersonaTarea)
+            val descripcionTarea: EditText = view.findViewById(R.id.etDescripcionTarea)
+            val fechaTarea: EditText = view.findViewById(R.id.etFechaTarea)
+            val enviar: Button = view.findViewById(R.id.bFormularioEnviar)
+
+            enviar.setOnClickListener {
+                 View.OnClickListener {
+                     if (!nombreProblema.text.isEmpty() && !lugarTarea.text.isEmpty() && !personaTarea.text.isEmpty()
+                         && !descripcionTarea.text.isEmpty() && !fechaTarea.text.isEmpty()
+                     ) {
+                         listTareas.add(
+                             Tareas
+
+                                 (
+                                 nombreProblema.text.toString(), lugarTarea.text.toString(),
+                                 personaTarea.text.toString() , descripcionTarea.text.toString(),fechaTarea.text.toString()
+                             )
+                         )
+                         Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
+                     } else {
+                         Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
+                     }
+                }
+
+            }
+            builder.setView(view)
+            builder.create().show()
+
         }
 
 
