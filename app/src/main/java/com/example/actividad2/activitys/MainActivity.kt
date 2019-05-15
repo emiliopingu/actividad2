@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
          val valor5: String = sha.getString("feccha", "vacio")
 
          listTareas.add(Tareas(valor1, valor2, valor3, valor4, valor5))*/
-
+        agregar()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             val showDialog=builder.show()
 
             view.bFormularioEnviar.setOnClickListener {
-                showDialog.dismiss()
                 val nombreProblema = view.etNombreProblema.text.toString()
                 val lugarTarea = view.etLugarTarea.text.toString()
                 val personaTarea = view.etPersonaTarea.text.toString()
@@ -67,17 +66,16 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
+                    inflater()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
                 }
+           showDialog.dismiss()
             }
             view.buttonCancel.setOnClickListener {
                 showDialog.dismiss()
             }
         }
-
-
-        agregar()
         inflater()
     }
 
