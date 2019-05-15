@@ -30,6 +30,10 @@ class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas
         holder.view.setOnClickListener {
             val intent1 = Intent(context, DescripcionTareaActivity::class.java)
             intent1.putExtra("tareaDescripcion", tarea.descripcion)
+            intent1.putExtra("usuarioDescripcion",tarea.usuarioTarea)
+            intent1.putExtra("problemaDescripcion",tarea.nombreTarea)
+            intent1.putExtra("lugarDescripcion",tarea.lugarTarea)
+            intent1.putExtra("fechaDescripcion",tarea.fecducidad)
             context.startActivity(intent1)
         }
     }
