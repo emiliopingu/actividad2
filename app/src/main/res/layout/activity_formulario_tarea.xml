@@ -70,7 +70,13 @@
     <Button
             android:text="Enviar"
             android:layout_width="match_parent"
-            android:layout_height="103dp" android:id="@+id/bFormularioEnviar"
+            android:layout_height="wrap_content" android:id="@+id/bFormularioEnviar"
             android:background="@android:color/background_light" android:textStyle="italic"
             android:textAlignment="center" android:textSize="30sp"/>
+    <Button
+            android:text="Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/buttonCancel"
+            android:background="@android:color/background_light" android:textAlignment="center"
+            android:textSize="24sp" android:fontFamily="sans-serif"/>
 </LinearLayout>

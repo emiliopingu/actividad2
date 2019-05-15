@@ -17,6 +17,7 @@ import com.example.actividad2.R
 import com.example.actividad2.adapter.AdapterTareas
 import com.example.actividad2.item.Tareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.*
+import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -42,38 +43,37 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener {
             /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
             startActivity(intent1)*/
-            val builder = AlertDialog.Builder(this)
+
             val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
-            val nombreProblema: EditText = view.findViewById(R.id.etNombreProblema)
-            val lugarTarea: EditText = view.findViewById(R.id.etLugarTarea)
-            val personaTarea: EditText = view.findViewById(R.id.etPersonaTarea)
-            val descripcionTarea: EditText = view.findViewById(R.id.etDescripcionTarea)
-            val fechaTarea: EditText = view.findViewById(R.id.etFechaTarea)
-            val enviar: Button = view.findViewById(R.id.bFormularioEnviar)
+            val builder = AlertDialog.Builder(this).setView(view)
+            val showDialog=builder.show()
 
-            enviar.setOnClickListener {
-                 View.OnClickListener {
-                     if (!nombreProblema.text.isEmpty() && !lugarTarea.text.isEmpty() && !personaTarea.text.isEmpty()
-                         && !descripcionTarea.text.isEmpty() && !fechaTarea.text.isEmpty()
-                     ) {
-                         listTareas.add(
-                             Tareas
+            view.bFormularioEnviar.setOnClickListener {
+                showDialog.dismiss()
+                val nombreProblema = view.etNombreProblema.text.toString()
+                val lugarTarea = view.etLugarTarea.text.toString()
+                val personaTarea = view.etPersonaTarea.text.toString()
+                val descripcionTarea = view.etDescripcionTarea.text.toString()
+                val fechaTarea = view.etFechaTarea.text.toString()
 
-                                 (
-                                 nombreProblema.text.toString(), lugarTarea.text.toString(),
-                                 personaTarea.text.toString() , descripcionTarea.text.toString(),fechaTarea.text.toString()
-                             )
-                         )
-                         Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
-                     } else {
-                         Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
-                     }
+                if (!nombreProblema.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
+                    && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
+                ) {
+                    listTareas.add(
+                        Tareas
+
+                            (
+                            nombreProblema, lugarTarea, personaTarea, descripcionTarea, fechaTarea
+                        )
+                    )
+                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
+                } else {
+                    Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
                 }
-
             }
-            builder.setView(view)
-            builder.create().show()
-
+            view.buttonCancel.setOnClickListener {
+                showDialog.dismiss()
+            }
         }
 
 
