@@ -1,6 +1,8 @@
 package com.example.actividad2.activitys
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -18,10 +20,22 @@ class FormularioTareaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_formulario_tarea)
 
 
+        val preferences:SharedPreferences=getSharedPreferences("guardado" , Context.MODE_PRIVATE)
 
 
         val button = findViewById<Button>(R.id.bFormularioEnviar)
         button.setOnClickListener {
+
+            val preference:SharedPreferences=getPreferences(Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor=preference.edit()
+            editor.putString("problema",etNombreProblema.text.toString())
+            editor.putString("lugarTarea",etLugarTarea.text.toString())
+            editor.putString("persona",etPersonaTarea.text.toString())
+            editor.putString("descripcion",etDescripcionTarea.text.toString())
+            editor.putString("feccha",etFechaTarea.text.toString())
+            editor.commit()
+
+
 
                 val intent = Intent(this@FormularioTareaActivity, MainActivity::class.java)
                 intent.putExtra("NombreProblema",etNombreProblema.text.toString())

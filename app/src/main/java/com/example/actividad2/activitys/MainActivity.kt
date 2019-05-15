@@ -1,6 +1,8 @@
 package com.example.actividad2.activitys
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -10,20 +12,27 @@ import android.widget.Button
 import com.example.actividad2.R
 import com.example.actividad2.adapter.AdapterTareas
 import com.example.actividad2.item.Tareas
+import kotlinx.android.synthetic.main.activity_formulario_tarea.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     val listTareas: MutableList<Tareas> = ArrayList()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val urlHomework = intent.getStringExtra("urlPlaneta")
-        val urlSpecies = intent.getStringExtra("urlEspecie")
-        val urlStarShips = intent.getStringExtra("urlStarShips")
-        val urlVehicles = intent.getStringExtra("urlVehicles")
+                 val sha:SharedPreferences=getPreferences(Context.MODE_PRIVATE)
+        val valor1:String=sha.getString("problema","vacio")
+        val valor2:String=sha.getString("lugarTarea","vacio")
+        val valor3:String=sha.getString("persona","vacio")
+        val valor4:String=sha.getString("descripcion","vacio")
+        val valor5:String=sha.getString("feccha","vacio")
+
+        listTareas.add(Tareas(valor1,valor2,valor3,valor4,valor5))
 
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -89,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
+
     }
 
     fun inflater() {
