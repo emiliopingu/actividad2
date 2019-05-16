@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.actividad2.R
 import com.example.actividad2.activitys.DescripcionTareaActivity
-import com.example.actividad2.item.Tareas
+import com.example.actividad2.items.Tareas
 import kotlinx.android.synthetic.main.tareas_list.view.*
 
 class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas>) :

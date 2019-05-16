@@ -1,6 +1,7 @@
-package com.example.actividad2.item
+package com.example.actividad2.items
 
 data class Tareas(
+    var id:Int=0,
     val nombreTarea: String,
     val lugarTarea: String,
     val usuarioTarea: String,

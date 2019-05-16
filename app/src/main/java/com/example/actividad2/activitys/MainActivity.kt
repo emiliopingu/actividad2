@@ -1,42 +1,31 @@
 package com.example.actividad2.activitys
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.text.InputType
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import com.example.actividad2.R
 import com.example.actividad2.adapter.AdapterTareas
-import com.example.actividad2.item.Tareas
-import kotlinx.android.synthetic.main.activity_formulario_tarea.*
+import com.example.actividad2.data.DataDbHelper
+import com.example.actividad2.items.Tareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     val listTareas: MutableList<Tareas> = ArrayList()
+    private var db:DataDbHelper? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /* val sha: SharedPreferences = getPreferences(Context.MODE_PRIVATE)
-         val valor1: String = sha.getString("problema", "vacio")
-         val valor2: String = sha.getString("lugarTarea", "vacio")
-         val valor3: String = sha.getString("persona", "vacio")
-         val valor4: String = sha.getString("descripcion", "vacio")
-         val valor5: String = sha.getString("feccha", "vacio")
+        db= DataDbHelper(this)
 
-         listTareas.add(Tareas(valor1, valor2, valor3, valor4, valor5))*/
         agregar()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -61,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                     listTareas.add(
                         Tareas
 
-                            (
+                            (5,
                             nombreProblema, lugarTarea, personaTarea, descripcionTarea, fechaTarea
                         )
                     )
@@ -82,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     fun agregar() {
         listTareas.add(
             Tareas
-                (
+                (0,
                 "Problemas con el inicio",
                 "Av.Velazquez" + "\n" + "Málaga",
                 "Mario Torrija",
@@ -92,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (
+                (1,
                 "Problemas base de datos",
                 "Calle Mauricio Moro Pareto " + "\n" + "Málaga",
                 "Andrea Esteban",
@@ -103,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (
+                (2,
                 "Usuario erroneo",
                 "Calle Obispo Hurtado" + "\n" + "Granada",
                 "Paco Rodriguez",
@@ -113,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (
+                (3,
                 "La aplicación me parece racista",
                 "Avenida Andalucia" + "\n" + "Jaen",
                 "Ricardo Milos",
@@ -123,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
         listTareas.add(
-            Tareas(
+            Tareas(4,
                 "Fallo de conexión",
                 ": Calle Medina" + "\n" + "Jerez de la frontera,Cadiz",
                 "Camarón de la isla",
