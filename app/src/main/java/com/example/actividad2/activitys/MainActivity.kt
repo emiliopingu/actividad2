@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         db = DataDbHelper(this)
 
         agregar()
+        db!!.insert(listTareas)
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -38,13 +39,13 @@ class MainActivity : AppCompatActivity() {
             val showDialog = builder.show()
 
             view.bFormularioEnviar.setOnClickListener {
-                val nombreProblema = view.etNombreProblema.text.toString()
+                val nombreTarea = view.etNombreProblema.text.toString()
                 val lugarTarea = view.etLugarTarea.text.toString()
                 val personaTarea = view.etPersonaTarea.text.toString()
                 val descripcionTarea = view.etDescripcionTarea.text.toString()
                 val fechaTarea = view.etFechaTarea.text.toString()
 
-                if (!nombreProblema.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
+                if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
                     && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
                 ) {
                     listTareas.add(
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
                             (
                             5,
-                            nombreProblema, lugarTarea, personaTarea, descripcionTarea, fechaTarea
+                            nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea
                         )
                     )
                     db!!.insert(listTareas)
@@ -127,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
-        db!!.insert(listTareas)
+
     }
 
     fun inflater() {

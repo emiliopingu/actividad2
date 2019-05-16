@@ -4,32 +4,33 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.util.UniversalTimeScale.toLong
+import android.util.Log
 import com.example.actividad2.items.Tareas
 
-class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    private val db: SQLiteDatabase
-    private val values: ContentValues
+val DATABASE_NAME = "DB"
+val ID = "_id"
+val TABLE_NAME = "tareas"
+val COLUMN_NOMBRE_TAREA = "nombreTarea"
+val COLUMN_LUGAR = "lugarTarea"
+val COLUMN_USUARIO = "usuario"
+val COLUMN_FECHA = "fecducidad"
+val COLUMN_DESCRIPCION = "descripcion"
 
-    companion object {
-        private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "tareas"
-    }
 
-    init {
-        db = this.writableDatabase
-        values = ContentValues()
-    }
+class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db!!.execSQL(
-            " CREATE TABLE " + Table.item.TABLE_NAME + " (" +
-                    Table.item.ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                    Table.item.COLUMN_NOMBRE_TAREA + "TEXT NOT NULL," +
-                    Table.item.COLUMN_LUGAR + "TEXT NOT NULL," +
-                    Table.item.COLUMN_USUARIO + "TEXT NOT NULL," +
-                    Table.item.COLUMN_DESCRIPCION + "TEXT NOT NULL," +
-                    Table.item.COLUMN_FECHA + "TEXT NOT NULL)"
-        );
+        val createTable =
+            " CREATE TABLE " + TABLE_NAME + " (" +
+                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
+                    COLUMN_NOMBRE_TAREA + "TEXT NOT NULL," +
+                    COLUMN_LUGAR + "TEXT NOT NULL," +
+                    COLUMN_USUARIO + "TEXT NOT NULL," +
+                    COLUMN_DESCRIPCION + "TEXT NOT NULL," +
+                    COLUMN_FECHA + "TEXT NOT NULL)"
+        db?.execSQL(createTable)
 
     }
 
@@ -37,27 +38,38 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     }
 
-    fun insert(items: List<Tareas>) {
-        values.put(Table.item.COLUMN_NOMBRE_TAREA, items[0].nombreTarea)
-        values.put(Table.item.COLUMN_LUGAR, items[0].lugarTarea)
-        values.put(Table.item.COLUMN_USUARIO, items[0].usuarioTarea)
-        values.put(Table.item.COLUMN_DESCRIPCION, items[0].descripcion)
-        values.put(Table.item.COLUMN_FECHA, items[0].fecducidad)
-        db.insert(Table.item.TABLE_NAME, null, values)
+    fun insert(tarea: List<Tareas>) {
+        val db =this.writableDatabase
+        val values =ContentValues()
+        values.put(COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
+        values.put(COLUMN_LUGAR, tarea[0].lugarTarea)
+        values.put(COLUMN_USUARIO, tarea[0].usuarioTarea)
+        values.put(COLUMN_DESCRIPCION, tarea[0].descripcion)
+        values.put(COLUMN_FECHA, tarea[0].fecducidad)
+        var result =db.insert(TABLE_NAME, null, values)
+        if(result == (-1).toLong()){
+            Log.i("funciona","funciona")
+        }else{
+            Log.i("NO funciona","NO funciona")
+        }
     }
 
-    fun getData(): MutableList<Tareas> {
+    /*fun getData(): MutableList<Tareas> {
 
-        Table.item.items.clear()
+        Table.tareas.items.clear()
         val columnas = arrayOf(
-            Table.item.ID, Table.item.COLUMN_NOMBRE_TAREA,
-            Table.item.COLUMN_LUGAR, Table.item.COLUMN_USUARIO, Table.item.COLUMN_DESCRIPCION, Table.item.COLUMN_FECHA
+            Table.tareas.ID,
+            Table.tareas.COLUMN_NOMBRE_TAREA,
+            Table.tareas.COLUMN_LUGAR,
+            Table.tareas.COLUMN_USUARIO,
+            Table.tareas.COLUMN_DESCRIPCION,
+            Table.tareas.COLUMN_FECHA
         )
-        val c = db.query(Table.item.TABLE_NAME, columnas, null, null, null, null, null)
+        val c = db.query(Table.tareas.TABLE_NAME, columnas, null, null, null, null, null)
 
         if (c.moveToFirst()) {
             do {
-                Table.item.items.add(
+                Table.tareas.items.add(
                     Tareas(
                         c.getInt(0), c.getString(1), c.getString(2),
                         c.getString(3), c.getString(4), c.getString(5)
@@ -66,6 +78,6 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             } while (c.moveToNext())
         }
 
-        return Table.item.items
-    }
+        return Table.tareas.items
+    }*/
 }
