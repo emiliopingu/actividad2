@@ -23,12 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         db = DataDbHelper(this)
-
-        agregar()
-        db!!.insert(listTareas)
-
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
             /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
@@ -45,9 +40,11 @@ class MainActivity : AppCompatActivity() {
                 val descripcionTarea = view.etDescripcionTarea.text.toString()
                 val fechaTarea = view.etFechaTarea.text.toString()
 
+
                 if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
                     && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
                 ) {
+
                     listTareas.add(
                         Tareas
 
@@ -72,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun agregar() {
+        db = DataDbHelper(this)
         listTareas.add(
             Tareas
                 (
@@ -128,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
-
+        db!!.insert(listTareas)
     }
 
     fun inflater() {
