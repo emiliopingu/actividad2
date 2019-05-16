@@ -17,14 +17,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     val listTareas: MutableList<Tareas> = ArrayList()
-    private var db:DataDbHelper? = null
+    private var db: DataDbHelper? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db= DataDbHelper(this)
+        db = DataDbHelper(this)
 
         agregar()
 
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
             val builder = AlertDialog.Builder(this).setView(view)
-            val showDialog=builder.show()
+            val showDialog = builder.show()
 
             view.bFormularioEnviar.setOnClickListener {
                 val nombreProblema = view.etNombreProblema.text.toString()
@@ -50,16 +50,18 @@ class MainActivity : AppCompatActivity() {
                     listTareas.add(
                         Tareas
 
-                            (5,
+                            (
+                            5,
                             nombreProblema, lugarTarea, personaTarea, descripcionTarea, fechaTarea
                         )
                     )
+                    db!!.insert(listTareas)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
                     inflater()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
                 }
-           showDialog.dismiss()
+                showDialog.dismiss()
             }
             view.buttonCancel.setOnClickListener {
                 showDialog.dismiss()
@@ -71,7 +73,8 @@ class MainActivity : AppCompatActivity() {
     fun agregar() {
         listTareas.add(
             Tareas
-                (0,
+                (
+                0,
                 "Problemas con el inicio",
                 "Av.Velazquez" + "\n" + "Málaga",
                 "Mario Torrija",
@@ -81,7 +84,8 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (1,
+                (
+                1,
                 "Problemas base de datos",
                 "Calle Mauricio Moro Pareto " + "\n" + "Málaga",
                 "Andrea Esteban",
@@ -92,7 +96,8 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (2,
+                (
+                2,
                 "Usuario erroneo",
                 "Calle Obispo Hurtado" + "\n" + "Granada",
                 "Paco Rodriguez",
@@ -102,7 +107,8 @@ class MainActivity : AppCompatActivity() {
         )
         listTareas.add(
             Tareas
-                (3,
+                (
+                3,
                 "La aplicación me parece racista",
                 "Avenida Andalucia" + "\n" + "Jaen",
                 "Ricardo Milos",
@@ -112,7 +118,8 @@ class MainActivity : AppCompatActivity() {
             )
         )
         listTareas.add(
-            Tareas(4,
+            Tareas(
+                4,
                 "Fallo de conexión",
                 ": Calle Medina" + "\n" + "Jerez de la frontera,Cadiz",
                 "Camarón de la isla",
@@ -120,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
-
+        db!!.insert(listTareas)
     }
 
     fun inflater() {

@@ -22,13 +22,14 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(
-            "CREATE TABLE " + Table.item.TABLE_NAME + " (" +
-                    Table.item.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            " CREATE TABLE " + Table.item.TABLE_NAME + " (" +
+                    Table.item.ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
                     Table.item.COLUMN_NOMBRE_TAREA + "TEXT NOT NULL," +
-                    Table.item.COLUMN_USUARIO + "TEXT NOT NULL," +
                     Table.item.COLUMN_LUGAR + "TEXT NOT NULL," +
+                    Table.item.COLUMN_USUARIO + "TEXT NOT NULL," +
                     Table.item.COLUMN_DESCRIPCION + "TEXT NOT NULL," +
-                    Table.item.COLUMN_FECHA + "TEXT NOT NULL)");
+                    Table.item.COLUMN_FECHA + "TEXT NOT NULL)"
+        );
 
     }
 
@@ -36,13 +37,35 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     }
 
-    fun insert(items:List<Tareas>){
-        values.put(Table.item.COLUMN_NOMBRE_TAREA,items[0].nombreTarea)
-        values.put(Table.item.COLUMN_USUARIO,items[0].usuarioTarea)
-        values.put(Table.item.COLUMN_LUGAR,items[0].lugarTarea)
-        values.put(Table.item.COLUMN_DESCRIPCION,items[0].descripcion)
-        values.put(Table.item.COLUMN_FECHA,items[0].fecducidad)
-        db.insert(Table.item.TABLE_NAME,null,values)
+    fun insert(items: List<Tareas>) {
+        values.put(Table.item.COLUMN_NOMBRE_TAREA, items[0].nombreTarea)
+        values.put(Table.item.COLUMN_LUGAR, items[0].lugarTarea)
+        values.put(Table.item.COLUMN_USUARIO, items[0].usuarioTarea)
+        values.put(Table.item.COLUMN_DESCRIPCION, items[0].descripcion)
+        values.put(Table.item.COLUMN_FECHA, items[0].fecducidad)
+        db.insert(Table.item.TABLE_NAME, null, values)
     }
 
+    fun getData(): MutableList<Tareas> {
+
+        Table.item.items.clear()
+        val columnas = arrayOf(
+            Table.item.ID, Table.item.COLUMN_NOMBRE_TAREA,
+            Table.item.COLUMN_LUGAR, Table.item.COLUMN_USUARIO, Table.item.COLUMN_DESCRIPCION, Table.item.COLUMN_FECHA
+        )
+        val c = db.query(Table.item.TABLE_NAME, columnas, null, null, null, null, null)
+
+        if (c.moveToFirst()) {
+            do {
+                Table.item.items.add(
+                    Tareas(
+                        c.getInt(0), c.getString(1), c.getString(2),
+                        c.getString(3), c.getString(4), c.getString(5)
+                    )
+                )
+            } while (c.moveToNext())
+        }
+
+        return Table.item.items
+    }
 }
