@@ -1,4 +1,4 @@
-package com.example.actividad2.items
+package com.example.actividad2.data.items
 
 data class Tareas(
     var id:Int=0,

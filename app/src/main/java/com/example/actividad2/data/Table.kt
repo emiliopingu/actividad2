@@ -1,6 +1,6 @@
 package com.example.actividad2.data
 
-import com.example.actividad2.items.Tareas
+import com.example.actividad2.data.items.Tareas
 
 class Table {
     abstract class items {

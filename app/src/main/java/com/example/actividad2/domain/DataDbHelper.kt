@@ -1,17 +1,20 @@
-package com.example.actividad2.data
+package com.example.actividad2.domain
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.icu.util.UniversalTimeScale.toLong
 import android.util.Log
-import com.example.actividad2.items.Tareas
+import com.example.actividad2.data.Table
+import com.example.actividad2.data.items.Tareas
 
 
 
 
-class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VER) {
+class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
+    DATABASE_NAME, null,
+    DATABASE_VER
+) {
 
     private val db: SQLiteDatabase
     private val values: ContentValues
@@ -32,7 +35,7 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                     Table.items.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     Table.items.COLUMN_NOMBRE_TAREA + " TEXT, " +
                     Table.items.COLUMN_LUGAR + " TEXT, " +
-                    Table.items. COLUMN_USUARIO + " TEXT, " +
+                    Table.items.COLUMN_USUARIO + " TEXT, " +
                     Table.items.COLUMN_FECHA + " TEXT, " +
                     Table.items.COLUMN_DESCRIPCION + " TEXT ); "
 

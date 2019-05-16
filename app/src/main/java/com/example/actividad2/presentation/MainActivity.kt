@@ -1,4 +1,4 @@
-package com.example.actividad2.activitys
+package com.example.actividad2.presentation
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,9 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
 import com.example.actividad2.R
-import com.example.actividad2.adapter.AdapterTareas
-import com.example.actividad2.data.DataDbHelper
-import com.example.actividad2.items.Tareas
+import com.example.actividad2.presentation.adapter.AdapterTareas
+import com.example.actividad2.domain.DataDbHelper
+import com.example.actividad2.data.items.Tareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
-        val adapter = AdapterTareas(this@MainActivity, listTareas)
+        val adapter = AdapterTareas(this@MainActivity, db!!.getData())
         recycleViewTareas.adapter = adapter
 
     }

@@ -1,4 +1,4 @@
-package com.example.actividad2.activitys
+package com.example.actividad2.presentation
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

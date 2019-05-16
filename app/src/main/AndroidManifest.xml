@@ -11,9 +11,9 @@
             android:theme="@style/AppTheme">
         <activity android:name=".activitys.FormularioTareaActivity">
         </activity>
-        <activity android:name=".activitys.DescripcionTareaActivity">
+        <activity android:name=".presentation.DescripcionTareaActivity">
         </activity>
-        <activity android:name=".activitys.MainActivity">
+        <activity android:name=".presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

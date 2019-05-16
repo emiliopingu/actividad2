@@ -1,4 +1,4 @@
-package com.example.actividad2.adapter
+package com.example.actividad2.presentation.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -7,14 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.actividad2.R
-import com.example.actividad2.activitys.DescripcionTareaActivity
-import com.example.actividad2.items.Tareas
+import com.example.actividad2.presentation.DescripcionTareaActivity
+import com.example.actividad2.domain.DataDbHelper
+import com.example.actividad2.data.items.Tareas
 import kotlinx.android.synthetic.main.tareas_list.view.*
 
 class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas>) :
     RecyclerView.Adapter<AdapterTareas.viewHolder>() {
 
-
+    private var db: DataDbHelper? = null
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): viewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.tareas_list, parent, false)
         return viewHolder(view)
@@ -22,6 +23,7 @@ class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas
 
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
+        db = DataDbHelper(context)
         val tarea = conjuntoTareas[position]
         holder.view.tvNombreTarea.text = tarea.nombreTarea
         holder.view.tvLugarTarea.text = tarea.lugarTarea
