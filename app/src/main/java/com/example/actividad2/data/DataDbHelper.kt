@@ -28,13 +28,13 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable =
-            "CREATE TABLE " + Table.Tareas.TABLE_NAME + "( " +
-                    Table.Tareas.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    Table.Tareas.COLUMN_NOMBRE_TAREA + " TEXT, " +
-                    Table.Tareas.COLUMN_LUGAR + " TEXT, " +
-                    Table.Tareas. COLUMN_USUARIO + " TEXT, " +
-                    Table.Tareas.COLUMN_FECHA + " TEXT, " +
-                    Table.Tareas.COLUMN_DESCRIPCION + " TEXT ); "
+            "CREATE TABLE " + Table.items.TABLE_NAME + "( " +
+                    Table.items.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    Table.items.COLUMN_NOMBRE_TAREA + " TEXT, " +
+                    Table.items.COLUMN_LUGAR + " TEXT, " +
+                    Table.items. COLUMN_USUARIO + " TEXT, " +
+                    Table.items.COLUMN_FECHA + " TEXT, " +
+                    Table.items.COLUMN_DESCRIPCION + " TEXT ); "
 
         db?.execSQL(createTable)
 
@@ -49,12 +49,12 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val db = this.writableDatabase
         val values = ContentValues()
 
-        values.put(Table.Tareas.COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
-        values.put(Table.Tareas.COLUMN_LUGAR, tarea[0].lugarTarea)
-        values.put(Table.Tareas.COLUMN_USUARIO, tarea[0].usuarioTarea)
-        values.put(Table.Tareas.COLUMN_DESCRIPCION, tarea[0].descripcion)
-        values.put(Table.Tareas.COLUMN_FECHA, tarea[0].fecducidad)
-        var result = db.insert(Table.Tareas.TABLE_NAME, null, values)
+        values.put(Table.items.COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
+        values.put(Table.items.COLUMN_LUGAR, tarea[0].lugarTarea)
+        values.put(Table.items.COLUMN_USUARIO, tarea[0].usuarioTarea)
+        values.put(Table.items.COLUMN_DESCRIPCION, tarea[0].descripcion)
+        values.put(Table.items.COLUMN_FECHA, tarea[0].fecducidad)
+        var result = db.insert(Table.items.TABLE_NAME, null, values)
         if (result == (-1).toLong()) {
             Log.i("funciona", "funciona")
         } else {
