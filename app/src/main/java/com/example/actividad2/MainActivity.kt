@@ -1,13 +1,13 @@
-package com.example.actividad2.presentation
+package com.example.actividad2
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.example.actividad2.R
 import com.example.actividad2.presentation.adapter.AdapterTareas
 import com.example.actividad2.domain.DataDbHelper
 import com.example.actividad2.data.items.Tareas
@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         inflater()
+     
     }
 
     fun agregar() {
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
             )
         )
-        listTareas.add(
+         listTareas.add(
             Tareas
                 (
                 2,
@@ -129,14 +130,14 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
-        db!!.insert(listTareas)
+
     }
 
     fun inflater() {
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
-        val adapter = AdapterTareas(this@MainActivity, db!!.getData())
+        val adapter = AdapterTareas(this@MainActivity,listTareas)
         recycleViewTareas.adapter = adapter
 
     }
