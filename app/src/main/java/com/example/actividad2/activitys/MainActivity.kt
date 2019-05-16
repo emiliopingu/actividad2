@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         db = DataDbHelper(this)
+        agregar()
+
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
             /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
