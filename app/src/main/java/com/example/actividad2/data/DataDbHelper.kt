@@ -14,7 +14,7 @@ val TABLE_NAME = "tareas"
 val COLUMN_NOMBRE_TAREA = "nombreTarea"
 val COLUMN_LUGAR = "lugarTarea"
 val COLUMN_USUARIO = "usuario"
-val COLUMN_FECHA = "fecducidad"
+val COLUMN_FECHA = " fecducidad"
 val COLUMN_DESCRIPCION = "descripcion"
 
 
@@ -22,14 +22,14 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable =
-            " CREATE TABLE " + TABLE_NAME + " (" +
-                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                    COLUMN_NOMBRE_TAREA + "TEXT NOT NULL," +
-                    COLUMN_LUGAR + "TEXT NOT NULL," +
-                    COLUMN_USUARIO + "TEXT NOT NULL," +
-                    COLUMN_DESCRIPCION + "TEXT NOT NULL," +
-                    COLUMN_FECHA + "TEXT NOT NULL)"
+        val createTable = "CREATE TABLE " + TABLE_NAME + "( " +
+                ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NOMBRE_TAREA + " TEXT, " +
+                COLUMN_LUGAR + " TEXT, " +
+                COLUMN_USUARIO + " TEXT, " +
+                COLUMN_FECHA + " TEXT, " +
+                COLUMN_DESCRIPCION + " TEXT ); "
+     
         db?.execSQL(createTable)
 
     }
@@ -39,18 +39,18 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
     fun insert(tarea: List<Tareas>) {
-        val db =this.writableDatabase
-        val values =ContentValues()
+        val db = this.writableDatabase
+        val values = ContentValues()
         values.put(COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
         values.put(COLUMN_LUGAR, tarea[0].lugarTarea)
         values.put(COLUMN_USUARIO, tarea[0].usuarioTarea)
         values.put(COLUMN_DESCRIPCION, tarea[0].descripcion)
         values.put(COLUMN_FECHA, tarea[0].fecducidad)
-        var result =db.insert(TABLE_NAME, null, values)
-        if(result == (-1).toLong()){
-            Log.i("funciona","funciona")
-        }else{
-            Log.i("NO funciona","NO funciona")
+        var result = db.insert(TABLE_NAME, null, values)
+        if (result == (-1).toLong()) {
+            Log.i("funciona", "funciona")
+        } else {
+            Log.i("NO funciona", "NO funciona")
         }
     }
 
