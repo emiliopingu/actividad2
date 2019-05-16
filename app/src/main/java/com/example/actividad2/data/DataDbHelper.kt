@@ -62,22 +62,22 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         }
     }
 
-    /*fun getData(): MutableList<Tareas> {
+    fun getData(): MutableList<Tareas> {
 
-        Table.tareas.items.clear()
+        Table.items.tarea.clear()
         val columnas = arrayOf(
-            Table.tareas.ID,
-            Table.tareas.COLUMN_NOMBRE_TAREA,
-            Table.tareas.COLUMN_LUGAR,
-            Table.tareas.COLUMN_USUARIO,
-            Table.tareas.COLUMN_DESCRIPCION,
-            Table.tareas.COLUMN_FECHA
+            Table.items.ID,
+            Table.items.COLUMN_NOMBRE_TAREA,
+            Table.items.COLUMN_LUGAR,
+            Table.items.COLUMN_USUARIO,
+            Table.items.COLUMN_DESCRIPCION,
+            Table.items.COLUMN_FECHA
         )
-        val c = db.query(Table.tareas.TABLE_NAME, columnas, null, null, null, null, null)
+        val c = db.query(Table.items.TABLE_NAME, columnas, null, null, null, null, null)
 
         if (c.moveToFirst()) {
             do {
-                Table.tareas.items.add(
+                Table.items.tarea.add(
                     Tareas(
                         c.getInt(0), c.getString(1), c.getString(2),
                         c.getString(3), c.getString(4), c.getString(5)
@@ -86,6 +86,5 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             } while (c.moveToNext())
         }
 
-        return Table.tareas.items
-    }*/
-}
+        return Table.items.tarea
+}}

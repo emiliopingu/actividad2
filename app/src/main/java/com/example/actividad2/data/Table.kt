@@ -1,7 +1,9 @@
 package com.example.actividad2.data
 
+import com.example.actividad2.items.Tareas
+
 class Table {
-    abstract class Tareas {
+    abstract class items {
         companion object {
             val ID = "_id"
             val TABLE_NAME = "tareas"
