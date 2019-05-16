@@ -9,8 +9,6 @@ import com.example.actividad2.data.Table
 import com.example.actividad2.data.items.Tareas
 
 
-
-
 class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
     DATABASE_NAME, null,
     DATABASE_VER
