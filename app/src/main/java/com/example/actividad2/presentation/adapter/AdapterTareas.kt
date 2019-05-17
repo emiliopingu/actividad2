@@ -24,6 +24,7 @@ class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         db = DataDbHelper(context)
+        db!!.insert(conjuntoTareas)
         val tarea = conjuntoTareas[position]
         holder.view.tvNombreTarea.text = tarea.nombreTarea
         holder.view.tvLugarTarea.text = tarea.lugarTarea

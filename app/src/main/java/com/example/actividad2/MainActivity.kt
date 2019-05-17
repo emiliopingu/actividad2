@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
                     )
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
-                    db!!.insert(listTareas)
                     inflater()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         inflater()
-     
+
     }
 
     fun agregar() {
