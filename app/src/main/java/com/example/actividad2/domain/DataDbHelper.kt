@@ -52,14 +52,14 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
     fun insert(tarea: MutableList<Tareas>) {
         val db = this.writableDatabase
         val values = ContentValues()
-        for(i in 0..tarea.size){
-            values.put(Table.items.ID, tarea[i].id)
+
+            values.put(Table.items.ID, tarea[0].id)
             values.put(Table.items.COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
             values.put(Table.items.COLUMN_LUGAR, tarea[0].lugarTarea)
             values.put(Table.items.COLUMN_USUARIO, tarea[0].usuarioTarea)
             values.put(Table.items.COLUMN_DESCRIPCION, tarea[0].descripcion)
             values.put(Table.items.COLUMN_FECHA, tarea[0].fecducidad)
-        }
+
 
         var result = db.insert(Table.items.TABLE_NAME, null, values)
         if (result == (-1).toLong()) {
