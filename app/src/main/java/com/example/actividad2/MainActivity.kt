@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.actividad2.presentation.adapter.AdapterTareas
@@ -20,10 +19,12 @@ class MainActivity : AppCompatActivity() {
     private var db: DataDbHelper? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         db = DataDbHelper(this)
+
         agregar()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -51,19 +52,21 @@ class MainActivity : AppCompatActivity() {
                         Tareas
 
                             (
-                            5,
                             nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea
                         )
                     )
-
+                    db!!.insert(listTareas)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
                     inflater()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
                 }
+
+
                 showDialog.dismiss()
             }
             view.buttonCancel.setOnClickListener {
+               db!!.getDelete()
                 showDialog.dismiss()
             }
         }
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         listTareas.add(
             Tareas
                 (
-                0,
+
                 "Problemas con el inicio",
                 "Av.Velazquez" + "\n" + "Málaga",
                 "Mario Torrija",
@@ -84,10 +87,12 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
+
+        db!!.insert(listTareas)
         listTareas.add(
             Tareas
                 (
-                1,
+
                 "Problemas base de datos",
                 "Calle Mauricio Moro Pareto " + "\n" + "Málaga",
                 "Andrea Esteban",
@@ -99,7 +104,7 @@ class MainActivity : AppCompatActivity() {
          listTareas.add(
             Tareas
                 (
-                2,
+
                 "Usuario erroneo",
                 "Calle Obispo Hurtado" + "\n" + "Granada",
                 "Paco Rodriguez",
@@ -107,10 +112,10 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
+        db!!.insert(listTareas)
         listTareas.add(
             Tareas
                 (
-                3,
                 "La aplicación me parece racista",
                 "Avenida Andalucia" + "\n" + "Jaen",
                 "Ricardo Milos",
@@ -119,9 +124,10 @@ class MainActivity : AppCompatActivity() {
 
             )
         )
+        db!!.insert(listTareas)
         listTareas.add(
             Tareas(
-                4,
+
                 "Fallo de conexión",
                 ": Calle Medina" + "\n" + "Jerez de la frontera,Cadiz",
                 "Camarón de la isla",
@@ -129,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 "27/6/2019"
             )
         )
-
+        db!!.insert(listTareas)
     }
 
     fun inflater() {
@@ -140,5 +146,6 @@ class MainActivity : AppCompatActivity() {
         recycleViewTareas.adapter = adapter
 
     }
+
 
 }

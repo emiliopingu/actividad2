@@ -9,7 +9,8 @@ import com.example.actividad2.data.Table
 import com.example.actividad2.data.items.Tareas
 
 
-class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
+class DataDbHelper(context: Context) : SQLiteOpenHelper(
+    context,
     DATABASE_NAME, null,
     DATABASE_VER
 ) {
@@ -22,9 +23,10 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
         private val DATABASE_VER = 1
 
     }
+
     init {
-        db=this.writableDatabase
-        values= ContentValues()
+        db = this.writableDatabase
+        values = ContentValues()
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -35,9 +37,10 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
                     Table.items.COLUMN_LUGAR + " TEXT, " +
                     Table.items.COLUMN_USUARIO + " TEXT, " +
                     Table.items.COLUMN_FECHA + " TEXT, " +
-                    Table.items.COLUMN_DESCRIPCION + " TEXT ); "
+                    Table.items.COLUMN_DESCRIPCION + "TEXT ); "
 
         db?.execSQL(createTable)
+
 
     }
 
@@ -46,15 +49,18 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
     }
 
 
-    fun insert(tarea: List<Tareas>) {
+    fun insert(tarea: MutableList<Tareas>) {
         val db = this.writableDatabase
         val values = ContentValues()
+        for(i in 0..tarea.size){
+            values.put(Table.items.ID, tarea[i].id)
+            values.put(Table.items.COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
+            values.put(Table.items.COLUMN_LUGAR, tarea[0].lugarTarea)
+            values.put(Table.items.COLUMN_USUARIO, tarea[0].usuarioTarea)
+            values.put(Table.items.COLUMN_DESCRIPCION, tarea[0].descripcion)
+            values.put(Table.items.COLUMN_FECHA, tarea[0].fecducidad)
+        }
 
-        values.put(Table.items.COLUMN_NOMBRE_TAREA, tarea[0].nombreTarea)
-        values.put(Table.items.COLUMN_LUGAR, tarea[0].lugarTarea)
-        values.put(Table.items.COLUMN_USUARIO, tarea[0].usuarioTarea)
-        values.put(Table.items.COLUMN_DESCRIPCION, tarea[0].descripcion)
-        values.put(Table.items.COLUMN_FECHA, tarea[0].fecducidad)
         var result = db.insert(Table.items.TABLE_NAME, null, values)
         if (result == (-1).toLong()) {
             Log.i("funciona", "funciona")
@@ -65,27 +71,33 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(context,
 
     fun getData(): MutableList<Tareas> {
 
-        Table.items.tarea.clear()
-        val columnas = arrayOf(
-            Table.items.ID,
-            Table.items.COLUMN_NOMBRE_TAREA,
-            Table.items.COLUMN_LUGAR,
-            Table.items.COLUMN_USUARIO,
-            Table.items.COLUMN_DESCRIPCION,
-            Table.items.COLUMN_FECHA
-        )
-        val c = db.query(Table.items.TABLE_NAME, columnas, null, null, null, null, null)
+        val list: MutableList<Tareas> = ArrayList()
+        val db: SQLiteDatabase = this.readableDatabase
+        val query = "SELECT * FROM " + Table.items.TABLE_NAME
+        val c = db.rawQuery(query, null)
 
         if (c.moveToFirst()) {
             do {
-                Table.items.tarea.add(
-                    Tareas(
-                        c.getInt(0), c.getString(1), c.getString(2),
-                        c.getString(3), c.getString(4), c.getString(5)
-                    )
-                )
+                var tarea = Tareas()
+                tarea.id = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA)).toInt()
+                tarea.nombreTarea = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA))
+                tarea.lugarTarea = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA))
+                tarea.usuarioTarea = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA))
+                tarea.descripcion = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA))
+                tarea.fecducidad = c.getString(c.getColumnIndex(Table.items.COLUMN_NOMBRE_TAREA))
+
             } while (c.moveToNext())
         }
 
-        return Table.items.tarea
-}}
+        c.close()
+        db.close()
+        return list
+    }
+
+    fun getDelete() {
+        val db = this.writableDatabase
+        db.delete(Table.items.TABLE_NAME, null, null)
+        db.close()
+
+    }
+}

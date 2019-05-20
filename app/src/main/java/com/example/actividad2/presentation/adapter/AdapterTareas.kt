@@ -19,16 +19,22 @@ class AdapterTareas(val context: Context, val conjuntoTareas: MutableList<Tareas
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): viewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.tareas_list, parent, false)
         return viewHolder(view)
+
     }
 
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
+
         db = DataDbHelper(context)
-        db!!.insert(conjuntoTareas)
+
+        var data= db!!.getData()
+        for(i in 0..data.size){
+            holder.view.tvNombreTarea.text = data[i].nombreTarea
+            holder.view.tvLugarTarea.text =data[i].lugarTarea
+            holder.view.tvUsuarioTarea.text =data[i].usuarioTarea
+        }
         val tarea = conjuntoTareas[position]
-        holder.view.tvNombreTarea.text = tarea.nombreTarea
-        holder.view.tvLugarTarea.text = tarea.lugarTarea
-        holder.view.tvUsuarioTarea.text = tarea.usuarioTarea
+
 
         holder.view.setOnClickListener {
             val intent1 = Intent(context, DescripcionTareaActivity::class.java)
