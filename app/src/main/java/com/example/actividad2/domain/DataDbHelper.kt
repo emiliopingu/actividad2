@@ -94,10 +94,12 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
         return list
     }
 
-    fun getDelete() {
+    fun getDelete(nombreTarea:String) {
         val db = this.writableDatabase
-        db.delete(Table.items.TABLE_NAME, null, null)
+        db.delete("DELETE FROM" +Table.items.TABLE_NAME, "WHERE nombreTarea='$nombreTarea'",null)
         db.close()
 
     }
 }
+
+

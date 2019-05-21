@@ -12,6 +12,7 @@ import com.example.actividad2.domain.DataDbHelper
 import com.example.actividad2.data.items.Tareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.formulario_eliminado.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,20 +57,47 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     db!!.insert(listTareas)
-                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG)
+                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                     inflater()
                 } else {
-                    Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG)
+                    Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
 
 
                 showDialog.dismiss()
             }
             view.buttonCancel.setOnClickListener {
-               db!!.getDelete()
+
                 showDialog.dismiss()
             }
         }
+
+     val buttonEliminar=findViewById<FloatingActionButton>(R.id.bEliminar)
+
+
+
+        buttonEliminar.setOnClickListener{
+            val view: View = layoutInflater.inflate(R.layout.formulario_eliminado, null)
+            val builder = AlertDialog.Builder(this).setView(view)
+            val showDialog = builder.show()
+
+            view.bEliminarT.setOnClickListener{
+                val nombreTarea = view.etEliminar.text.toString()
+                if (!nombreTarea.isEmpty()){
+                    db!!.getDelete(nombreTarea)
+                    Toast.makeText(applicationContext,"Se eliminio el dato ",Toast.LENGTH_LONG).show()
+                }
+                showDialog.dismiss()
+                inflater()
+            }
+            view.cancelar.setOnClickListener {
+                showDialog.dismiss()
+            }
+
+
+        }
+
+
         inflater()
 
     }
