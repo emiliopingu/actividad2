@@ -1,5 +1,8 @@
 package com.example.actividad2
 
+import android.content.ContentValues
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -7,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
+import com.example.actividad2.data.Table
 import com.example.actividad2.presentation.adapter.AdapterTareas
 import com.example.actividad2.domain.DataDbHelper
 import com.example.actividad2.data.items.Tareas
@@ -16,17 +20,17 @@ import kotlinx.android.synthetic.main.formulario_eliminado.view.*
 
 class MainActivity : AppCompatActivity() {
 
-    val listTareas: MutableList<Tareas> = ArrayList()
-    private var db: DataDbHelper? = null
 
+    private var db: SQLiteDatabase? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        db = DataDbHelper(this)
+        val helper = DataDbHelper(this)
+        db = helper.writableDatabase
 
-        agregar()
+
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -48,15 +52,7 @@ class MainActivity : AppCompatActivity() {
                 if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
                     && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
                 ) {
-
-                    listTareas.add(
-                        Tareas
-
-                            (
-                            nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea
-                        )
-                    )
-                    db!!.insert(listTareas)
+                    insertar(nombreTarea,lugarTarea,personaTarea,descripcionTarea,fechaTarea)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                     inflater()
                 } else {
@@ -73,9 +69,6 @@ class MainActivity : AppCompatActivity() {
         }
 
      val buttonEliminar=findViewById<FloatingActionButton>(R.id.bEliminar)
-
-
-
         buttonEliminar.setOnClickListener{
             val view: View = layoutInflater.inflate(R.layout.formulario_eliminado, null)
             val builder = AlertDialog.Builder(this).setView(view)
@@ -84,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             view.bEliminarT.setOnClickListener{
                 val nombreTarea = view.etEliminar.text.toString()
                 if (!nombreTarea.isEmpty()){
-                    db!!.getDelete(nombreTarea)
+
                     Toast.makeText(applicationContext,"Se eliminio el dato ",Toast.LENGTH_LONG).show()
                 }
                 showDialog.dismiss()
@@ -96,13 +89,11 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-
-
         inflater()
 
     }
 
-    fun agregar() {
+    /*fun agregar() {
 
         listTareas.add(
             Tareas
@@ -164,15 +155,29 @@ class MainActivity : AppCompatActivity() {
             )
         )
         db!!.insert(listTareas)
-    }
+    }*/
 
     fun inflater() {
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
-        val adapter = AdapterTareas(this@MainActivity,listTareas)
+        val adapter = items()?.let { AdapterTareas(this@MainActivity, it) }
         recycleViewTareas.adapter = adapter
 
+    }
+    fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
+        val values = ContentValues()
+        values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
+        values.put(Table.items.COLUMN_LUGAR, lugar)
+        values.put(Table.items.COLUMN_USUARIO, usuario)
+        values.put(Table.items.COLUMN_DESCRIPCION, descripcion)
+        values.put(Table.items.COLUMN_FECHA, fecha)
+        db!!.insert(Table.items.TABLE_NAME, null, values)
+    }
+
+    fun items(): Cursor? {
+        return db!!.query(Table.items.TABLE_NAME,null,null,
+            null,null,null,null)
     }
 
 

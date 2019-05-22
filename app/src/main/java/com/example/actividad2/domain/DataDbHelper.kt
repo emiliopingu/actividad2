@@ -45,11 +45,11 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
+        db?.execSQL("DROP TABLE IF EXISTS " + Table.items.TABLE_NAME)
     }
 
 
-    fun insert(tarea: MutableList<Tareas>) {
+ /*   fun insert(tarea: MutableList<Tareas>) {
         val db = this.writableDatabase
         val values = ContentValues()
 
@@ -67,9 +67,9 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
         } else {
             Log.i("NO funciona", "NO funciona")
         }
-    }
+    }*/
 
-    fun getData(): MutableList<Tareas> {
+   /* fun getData(): MutableList<Tareas> {
 
         val list: MutableList<Tareas> = ArrayList()
         val db: SQLiteDatabase = this.readableDatabase
@@ -92,7 +92,7 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
         c.close()
         db.close()
         return list
-    }
+    }*/
 
     fun getDelete(nombreTarea:String) {
         val db = this.writableDatabase
