@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.Toast
 import com.example.actividad2.data.Table
@@ -90,7 +92,20 @@ class MainActivity : AppCompatActivity() {
 
         }
         inflater()
+        val simpleItemTouchHelper = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, p1: Int) {
+             moverItem(viewHolder.itemView.tag as Long)
+            }
+
+        }
+    }
+    fun moverItem(id:Long){
+        db!!.delete(Table.items.TABLE_NAME,Table.items.ID + "=" +id ,null)
     }
 
     /*fun agregar() {
