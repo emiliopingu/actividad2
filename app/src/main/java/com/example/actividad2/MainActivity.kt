@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         db = helper.writableDatabase
 
 
-
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
             /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
                     && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
                 ) {
-                    insertar(nombreTarea,lugarTarea,personaTarea,descripcionTarea,fechaTarea)
+                    insertar(nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                     inflater()
                 } else {
@@ -70,17 +69,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-     val buttonEliminar=findViewById<FloatingActionButton>(R.id.bEliminar)
-        buttonEliminar.setOnClickListener{
+        val buttonEliminar = findViewById<FloatingActionButton>(R.id.bEliminar)
+        buttonEliminar.setOnClickListener {
             val view: View = layoutInflater.inflate(R.layout.formulario_eliminado, null)
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
-            view.bEliminarT.setOnClickListener{
+            view.bEliminarT.setOnClickListener {
                 val nombreTarea = view.etEliminar.text.toString()
-                if (!nombreTarea.isEmpty()){
-
-                    Toast.makeText(applicationContext,"Se eliminio el dato ",Toast.LENGTH_LONG).show()
+                if (!nombreTarea.isEmpty()) {
+                    db!!.delete(Table.items.TABLE_NAME, Table.items.COLUMN_NOMBRE_TAREA + "=" + nombreTarea, null)
+                    Toast.makeText(applicationContext, "Se eliminio el dato ", Toast.LENGTH_LONG).show()
                 }
                 showDialog.dismiss()
                 inflater()
@@ -92,21 +91,27 @@ class MainActivity : AppCompatActivity() {
 
         }
         inflater()
-        val simpleItemTouchHelper = object: ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
-            override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+        /* val simpleItemTouchHelper =
+             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                 override fun onMove(
+                     p0: RecyclerView,
+                     p1: RecyclerView.ViewHolder,
+                     p2: RecyclerView.ViewHolder
+                 ): Boolean {
+                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                 }
 
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, p1: Int) {
-             moverItem(viewHolder.itemView.tag as Long)
-            }
+                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, p1: Int) {
+                     moverItem(viewHolder.itemView.tag as Long)
+                 }
 
-        }
+             }*/
     }
-    fun moverItem(id:Long){
-        db!!.delete(Table.items.TABLE_NAME,Table.items.ID + "=" +id ,null)
-    }
+
+    /* fun moverItem(id: Long) {
+         db!!.delete(Table.items.TABLE_NAME, Table.items.ID + "=" + id, null)
+     }*/
 
     /*fun agregar() {
 
@@ -180,6 +185,7 @@ class MainActivity : AppCompatActivity() {
         recycleViewTareas.adapter = adapter
 
     }
+
     fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
         val values = ContentValues()
         values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
@@ -191,8 +197,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun items(): Cursor? {
-        return db!!.query(Table.items.TABLE_NAME,null,null,
-            null,null,null,null)
+        return db!!.query(
+            Table.items.TABLE_NAME, null, null,
+            null, null, null, null
+        )
     }
 
 
