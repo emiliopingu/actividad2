@@ -46,17 +46,17 @@ class MainActivity : AppCompatActivity() {
             val showDialog = builder.show()
 
             view.bFormularioEnviar.setOnClickListener {
-                val nombreTarea = view.etNombreProblema.text.toString()
-                val lugarTarea = view.etLugarTarea.text.toString()
-                val personaTarea = view.etPersonaTarea.text.toString()
-                val descripcionTarea = view.etDescripcionTarea.text.toString()
-                val fechaTarea = view.etFechaTarea.text.toString()
+                val nombre = view.etNombreProblema.text.toString()
+                val lugar = view.etLugarTarea.text.toString()
+                val usuario = view.etPersonaTarea.text.toString()
+                val descripcion = view.etDescripcionTarea.text.toString()
+                val fecha = view.etFechaTarea.text.toString()
 
 
-                if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
-                    && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
+                if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
+                    && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                   helper.insertData(nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea)
+                   helper.insertData(nombre, lugar, usuario, descripcion, fecha)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                     db.close()
                 } else {
@@ -79,9 +79,10 @@ class MainActivity : AppCompatActivity() {
             val showDialog = builder.show()
 
             view.bEliminarT.setOnClickListener {
-                val nombreTarea = view.etEliminar.text.toString()
-                if (!nombreTarea.isEmpty()) {
-                    db!!.delete(Table.items.TABLE_NAME, Table.items.COLUMN_NOMBRE_TAREA + "=" + nombreTarea, null)
+                val nombre = view.etEliminar.text.toString()
+                if (!nombre.isEmpty()) {
+                  //  db!!.delete(Table.items.TABLE_NAME, Table.items.COLUMN_NOMBRE_TAREA + "=" + nombreTarea, null)
+                   helper.getDelete(nombre)
                     Toast.makeText(applicationContext, "Se eliminio el dato ", Toast.LENGTH_LONG).show()
                 }
                 showDialog.dismiss()

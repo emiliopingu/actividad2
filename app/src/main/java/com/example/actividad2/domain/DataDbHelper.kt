@@ -16,38 +16,28 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
 ) {
 
 
-
     companion object {
         private const val DATABASE_NAME = "DB"
         private const val DATABASE_VER = 1
-
-        val ID = "_id"
-        val TABLE_NAME = " tareas"
-        val COLUMN_NOMBRE_TAREA = " nombreTarea"
-        val COLUMN_LUGAR = " lugarTarea"
-        val COLUMN_USUARIO = " usuarioTarea"
-        val COLUMN_FECHA = " fecducidad"
-        val COLUMN_DESCRIPCION = " descripcion"
-        //var tarea: MutableList<Tareas> = ArrayList()
 
 
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-      /*  val createTable =
-            "CREATE TABLE " + Table.items.TABLE_NAME + "( " +
-                    Table.items.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    Table.items.COLUMN_NOMBRE_TAREA + " TEXT, " +
-                    Table.items.COLUMN_LUGAR + " TEXT, " +
-                    Table.items.COLUMN_USUARIO + " TEXT, " +
-                    Table.items.COLUMN_FECHA + " TEXT, " +
-                    Table.items.COLUMN_DESCRIPCION + "TEXT ); "
+        /*  val createTable =
+              "CREATE TABLE " + Table.items.TABLE_NAME + "( " +
+                      Table.items.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                      Table.items.COLUMN_NOMBRE_TAREA + " TEXT, " +
+                      Table.items.COLUMN_LUGAR + " TEXT, " +
+                      Table.items.COLUMN_USUARIO + " TEXT, " +
+                      Table.items.COLUMN_FECHA + " TEXT, " +
+                      Table.items.COLUMN_DESCRIPCION + "TEXT ); "
 
-        db?.execSQL(createTable)*/
-       // db?.delete(Table.items.TABLE_NAME, null, null)
+          db?.execSQL(createTable)*/
+        db?.delete("tareas", null, null)
 
-
-        db?.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_NAME(ID INTEGER PRIMARY KEY AUTOINCREMENT , NOMBRE TEXT , LUGAR TEXT,USUARIO TEXT ,FECHA TEXT,DESCRIPCION TEXT)")
+        val nombreTabla: String = Table.items.TABLE_NAME
+        db?.execSQL("CREATE TABLE IF NOT EXISTS $nombreTabla(ID INTEGER PRIMARY KEY AUTOINCREMENT , NOMBRE TEXT , LUGAR TEXT,USUARIO TEXT ,FECHA TEXT,DESCRIPCION TEXT)")
 
 
     }
@@ -58,20 +48,20 @@ class DataDbHelper(context: Context) : SQLiteOpenHelper(
     }
 
 
-      fun insertData(nombre:String , lugar:String , usuario:String , fecha:String ,descripcion:String) :Boolean {
-           val db = this.writableDatabase
-           val values = ContentValues()
+    fun insertData(nombre: String, lugar: String, usuario: String, fecha: String, descripcion: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues()
 
-               values.put(COLUMN_NOMBRE_TAREA,nombre)
-               values.put(COLUMN_LUGAR,lugar)
-               values.put(COLUMN_USUARIO, usuario)
-               values.put(COLUMN_FECHA,fecha)
-               values.put(COLUMN_DESCRIPCION,descripcion)
+        values.put(Table.items.COLUMN_NOMBRE_TAREA,nombre)
+        values.put(Table.items.COLUMN_LUGAR, lugar)
+        values.put(Table.items.COLUMN_USUARIO, usuario)
+        values.put(Table.items.COLUMN_FECHA, fecha)
+        values.put(Table.items.COLUMN_DESCRIPCION, descripcion)
 
 
-           var result = db.insert(Table.items.TABLE_NAME, null, values)
-          return !result.equals(-1)
-       }
+        var result = db.insert(Table.items.TABLE_NAME, null, values)
+        return !result.equals(-1)
+    }
 
     /* fun getData(): MutableList<Tareas> {
 
