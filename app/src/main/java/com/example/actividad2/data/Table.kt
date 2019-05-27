@@ -12,7 +12,7 @@ class Table {
             val COLUMN_USUARIO = " usuarioTarea"
             val COLUMN_FECHA = " fecducidad"
             val COLUMN_DESCRIPCION = " descripcion"
-            var tarea: MutableList<Tareas> = ArrayList()
+            //var tarea: MutableList<Tareas> = ArrayList()
         }
     }
 }

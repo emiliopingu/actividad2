@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
 
     private var db: SQLiteDatabase? = null
 
-
+    private val helper = DataDbHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val helper = DataDbHelper(this)
-        db = helper.writableDatabase
+
+
 
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -187,6 +187,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
+        db = helper.writableDatabase
         val values = ContentValues()
         values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
         values.put(Table.items.COLUMN_LUGAR, lugar)
