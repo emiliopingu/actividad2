@@ -2,7 +2,7 @@ package com.example.actividad2.data.items
 
 class Tareas {
     var id: Int = 0
-    var nombreTarea: String = ""
+    private var nombreTarea: String = ""
     var lugarTarea: String = ""
     var usuarioTarea: String = ""
     var descripcion: String = ""

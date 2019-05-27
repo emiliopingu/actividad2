@@ -5,10 +5,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.insert
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.ThemedSpinnerAdapter
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.Toast
@@ -23,13 +25,14 @@ import kotlinx.android.synthetic.main.formulario_eliminado.view.*
 class MainActivity : AppCompatActivity() {
 
 
-    private var db: SQLiteDatabase? = null
 
-    private val helper = DataDbHelper(this)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val helper = DataDbHelper(this)
+        val db = helper.writableDatabase
 
 
 
@@ -53,9 +56,9 @@ class MainActivity : AppCompatActivity() {
                 if (!nombreTarea.isEmpty() && !lugarTarea.isEmpty() && !personaTarea.isEmpty()
                     && !descripcionTarea.isEmpty() && !fechaTarea.isEmpty()
                 ) {
-                    insertar(nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea)
+                   helper.insertData(nombreTarea, lugarTarea, personaTarea, descripcionTarea, fechaTarea)
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
-                    inflater()
+                    db.close()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
@@ -186,18 +189,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
-        db = helper.writableDatabase
-        val values = ContentValues()
-        values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
-        values.put(Table.items.COLUMN_LUGAR, lugar)
-        values.put(Table.items.COLUMN_USUARIO, usuario)
-        values.put(Table.items.COLUMN_DESCRIPCION, descripcion)
-        values.put(Table.items.COLUMN_FECHA, fecha)
-        db!!.insert(Table.items.TABLE_NAME, null, values)
-    }
+   //fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
+
+       // val values = ContentValues()
+      //  values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
+       // values.put(Table.items.COLUMN_LUGAR, lugar)
+       // values.put(Table.items.COLUMN_USUARIO, usuario)
+      //  values.put(Table.items.COLUMN_DESCRIPCION, descripcion)
+      //  values.put(Table.items.COLUMN_FECHA, fecha)
+       // db!!.insert(Table.items.TABLE_NAME, null, values)
+   // }
 
     fun items(): Cursor? {
+        val helper = DataDbHelper(this)
+        val db = helper.writableDatabase
         return db!!.query(
             Table.items.TABLE_NAME, null, null,
             null, null, null, null
