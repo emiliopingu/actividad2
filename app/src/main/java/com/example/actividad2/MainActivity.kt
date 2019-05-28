@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val helper = TaskHelper(this)
         val db = helper.writableDatabase
+
+
         consult()
-        inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -49,13 +50,14 @@ class MainActivity : AppCompatActivity() {
                     Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha)
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
-                    inflater()
+
+
 
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
 
-
+                inflater()
                 showDialog.dismiss()
             }
             view.buttonCancel.setOnClickListener {
@@ -75,9 +77,9 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty()) {
                     Repository(this).deleteTask(nombre)
                     Toast.makeText(applicationContext, "El usuario Fue Eliminado", Toast.LENGTH_LONG).show()
-                    inflater()
 
                 }
+                inflater()
                 showDialog.dismiss()
 
             }
@@ -157,6 +159,7 @@ class MainActivity : AppCompatActivity() {
     }*/
 
     fun inflater() {
+
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
