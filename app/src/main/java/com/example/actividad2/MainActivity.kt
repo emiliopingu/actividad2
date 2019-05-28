@@ -1,45 +1,36 @@
 package com.example.actividad2
 
-import android.content.ContentValues
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.insert
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.ThemedSpinnerAdapter
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.Toast
-import com.example.actividad2.data.Table
+import com.example.actividad2.data.ReadTask
+import com.example.actividad2.data.Task
+import com.example.actividad2.domain.Repository
+import com.example.actividad2.domain.TaskHelper
 import com.example.actividad2.presentation.adapter.AdapterTareas
-import com.example.actividad2.domain.DataDbHelper
-import com.example.actividad2.data.items.Tareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_eliminado.view.*
+import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
 
-
-
-
-
+    var list: MutableList<Task> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val helper = DataDbHelper(this)
+        val helper = TaskHelper(this)
         val db = helper.writableDatabase
-
-
+        consult()
+        inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
-            /*val intent1 = Intent(this@MainActivity, FormularioTareaActivity::class.java)
-            startActivity(intent1)*/
 
             val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
             val builder = AlertDialog.Builder(this).setView(view)
@@ -52,13 +43,14 @@ class MainActivity : AppCompatActivity() {
                 val descripcion = view.etDescripcionTarea.text.toString()
                 val fecha = view.etFechaTarea.text.toString()
 
-
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                   helper.insertData(nombre, lugar, usuario, descripcion, fecha)
+                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha)
+
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
-                    db.close()
+                    inflater()
+
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
@@ -81,12 +73,13 @@ class MainActivity : AppCompatActivity() {
             view.bEliminarT.setOnClickListener {
                 val nombre = view.etEliminar.text.toString()
                 if (!nombre.isEmpty()) {
-                  //  db!!.delete(Table.items.TABLE_NAME, Table.items.COLUMN_NOMBRE_TAREA + "=" + nombreTarea, null)
-                   helper.getDelete(nombre)
-                    Toast.makeText(applicationContext, "Se eliminio el dato ", Toast.LENGTH_LONG).show()
+                    Repository(this).deleteTask(nombre)
+                    Toast.makeText(applicationContext, "El usuario Fue Eliminado", Toast.LENGTH_LONG).show()
+                    inflater()
+
                 }
                 showDialog.dismiss()
-                inflater()
+
             }
             view.cancelar.setOnClickListener {
                 showDialog.dismiss()
@@ -94,28 +87,10 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-        inflater()
-        /* val simpleItemTouchHelper =
-             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-                 override fun onMove(
-                     p0: RecyclerView,
-                     p1: RecyclerView.ViewHolder,
-                     p2: RecyclerView.ViewHolder
-                 ): Boolean {
-                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                 }
 
-
-                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, p1: Int) {
-                     moverItem(viewHolder.itemView.tag as Long)
-                 }
-
-             }*/
     }
 
-    /* fun moverItem(id: Long) {
-         db!!.delete(Table.items.TABLE_NAME, Table.items.ID + "=" + id, null)
-     }*/
+
 
     /*fun agregar() {
 
@@ -185,30 +160,29 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
-        val adapter = items()?.let { AdapterTareas(this@MainActivity, it) }
+        val adapter =  AdapterTareas(this@MainActivity, list)
         recycleViewTareas.adapter = adapter
 
     }
 
-   //fun insertar(nombre: String, lugar: String, usuario: String, descripcion: String, fecha: String) {
 
-       // val values = ContentValues()
-      //  values.put(Table.items.COLUMN_NOMBRE_TAREA, nombre)
-       // values.put(Table.items.COLUMN_LUGAR, lugar)
-       // values.put(Table.items.COLUMN_USUARIO, usuario)
-      //  values.put(Table.items.COLUMN_DESCRIPCION, descripcion)
-      //  values.put(Table.items.COLUMN_FECHA, fecha)
-       // db!!.insert(Table.items.TABLE_NAME, null, values)
-   // }
 
-    fun items(): Cursor? {
-        val helper = DataDbHelper(this)
+
+    fun consult() {
+
+        val helper = TaskHelper(this)
         val db = helper.writableDatabase
-        return db!!.query(
-            Table.items.TABLE_NAME, null, null,
-            null, null, null, null
-        )
-    }
+        val cursor: Cursor = db.rawQuery(" SELECT * FROM " + ReadTask.Entry.TABLE_NAME, null)
+        while (cursor.moveToNext()) {
 
+            val name: String = cursor.getString(1)
+            val place: String = cursor.getString(2)
+            val user: String = cursor.getString(3)
+            val datee: String = cursor.getString(4)
+            val description: String = cursor.getString(5)
+            list.add(Task(0,name, place, user, datee, description))
+
+        }
+    }
 
 }
