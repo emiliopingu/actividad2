@@ -1,11 +1,15 @@
 package com.example.actividad2
 
+import android.app.DatePickerDialog
 import android.database.Cursor
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.actividad2.data.ReadTask
@@ -13,11 +17,12 @@ import com.example.actividad2.data.Task
 import com.example.actividad2.domain.Repository
 import com.example.actividad2.domain.TaskHelper
 import com.example.actividad2.presentation.adapter.AdapterTareas
+import kotlinx.android.synthetic.main.activity_formulario_tarea.*
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 
-import java.lang.NullPointerException
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,12 +42,39 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
+            val nombre = view.etNombreProblema.text.toString()
+            val lugar = view.etLugarTarea.text.toString()
+            val usuario = view.etPersonaTarea.text.toString()
+            val descripcion = view.etDescripcionTarea.text.toString()
+            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
+                override fun onSwiped(view1: RecyclerView.ViewHolder, position: Int) {
+                    list.removeAt(view1.adapterPosition)
+                    val l =list[position]
+                    Repository(this@MainActivity).deleteTask(l.name)
+                }
+
+                override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
+                    return false
+                }
+            }
+            Log.i("eliminarItem", "hola$itemTouchHelper")
+
+            view.bDate.setOnClickListener{
+                val c:Calendar=Calendar.getInstance()
+                val day=c.get(Calendar.DAY_OF_MONTH)
+                val moth=c.get(Calendar.MONTH)
+                val year=c.get(Calendar.YEAR )
+
+                val date:DatePickerDialog= DatePickerDialog(this,DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDayOfMonth ->
+                    view.tvdate.text = "$mDayOfMonth/$mMonth/$mYear"
+                }, year, moth, day)
+                date.show()
+            }
+                    val fecha=view.tvdate.text.toString()
+
             view.bFormularioEnviar.setOnClickListener {
-                val nombre = view.etNombreProblema.text.toString()
-                val lugar = view.etLugarTarea.text.toString()
-                val usuario = view.etPersonaTarea.text.toString()
-                val descripcion = view.etDescripcionTarea.text.toString()
-                val fecha = view.etFechaTarea.text.toString()
+
+
 
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
@@ -92,19 +124,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
 
-                /*val nombre = view.etEliminar.text.toString()
-                if (!nombre.isEmpty()) {
-                    Repository(this).deleteTask(nombre)
-                    for(x in 0  until list.size){
-                        if(list[x].name==nombre){
-                            list.removeAt(x)
-                        }
 
-                    }
-
-                    Toast.makeText(applicationContext, "El usuario Fue Eliminado", Toast.LENGTH_LONG).show()
-
-                }*/
 
                 showDialog.dismiss()
                 inflater()
@@ -130,6 +150,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
     fun consult() {
 
         val helper = TaskHelper(this)
@@ -146,5 +168,5 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 }
+

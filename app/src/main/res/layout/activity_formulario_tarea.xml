@@ -59,13 +59,20 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="80dp">
-        <EditText
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/etFechaTarea" android:textColor="@android:color/background_light"
-                android:hint="Introduzca fecha de caducidad" android:textColorHint="@android:color/background_light"/>
+                android:layout_height="match_parent">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/tvdate" android:layout_weight="1"
+                    android:textAlignment="center"/>
+            <Button
+                    android:text="fecha"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent" android:id="@+id/bDate"/>
+        </LinearLayout>
     </LinearLayout>
     <Button
             android:text="Enviar"

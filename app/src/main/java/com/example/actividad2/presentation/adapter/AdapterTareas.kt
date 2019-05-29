@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.tareas_list.view.*
 class AdapterTareas(private val context: Context, var list: MutableList<Task>) :
     RecyclerView.Adapter<AdapterTareas.viewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): viewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.tareas_list, parent, false)
         return viewHolder(view)
@@ -37,7 +36,6 @@ class AdapterTareas(private val context: Context, var list: MutableList<Task>) :
         holder.view.tvNombreTarea.text = nombre
         holder.view.tvLugarTarea.text = lugar
         holder.view.tvUsuarioTarea.text = usuario
-
 
 
         holder.view.setOnClickListener {
