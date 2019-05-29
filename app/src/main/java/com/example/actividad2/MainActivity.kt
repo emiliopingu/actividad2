@@ -26,9 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val helper = TaskHelper(this)
         val db = helper.writableDatabase
-
-
         consult()
+        inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -48,20 +47,18 @@ class MainActivity : AppCompatActivity() {
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
                     Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha)
-
+                    list.add(Task(0,nombre, lugar, usuario, descripcion, fecha))
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
-
-
-
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
 
-                inflater()
                 showDialog.dismiss()
-            }
-            view.buttonCancel.setOnClickListener {
+                inflater()
 
+            }
+
+            view.buttonCancel.setOnClickListener {
                 showDialog.dismiss()
             }
         }
@@ -76,12 +73,19 @@ class MainActivity : AppCompatActivity() {
                 val nombre = view.etEliminar.text.toString()
                 if (!nombre.isEmpty()) {
                     Repository(this).deleteTask(nombre)
+                    for(x in 0  until list.size){
+                        if(list[x].name==nombre){
+                            list.removeAt(x)
+                        }
+
+                    }
+
                     Toast.makeText(applicationContext, "El usuario Fue Eliminado", Toast.LENGTH_LONG).show()
 
                 }
-                inflater()
-                showDialog.dismiss()
 
+                showDialog.dismiss()
+                inflater()
             }
             view.cancelar.setOnClickListener {
                 showDialog.dismiss()
@@ -94,81 +98,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    /*fun agregar() {
-
-        listTareas.add(
-            Tareas
-                (
-
-                "Problemas con el inicio",
-                "Av.Velazquez" + "\n" + "Málaga",
-                "Mario Torrija",
-                "Al iniciar la aplicación en un movil xiaomi la aplucacoón por una extraña razón se cierra automaticamente nada mas abrirla",
-                "27/6/2019"
-            )
-        )
-
-        db!!.insert(listTareas)
-        listTareas.add(
-            Tareas
-                (
-
-                "Problemas base de datos",
-                "Calle Mauricio Moro Pareto " + "\n" + "Málaga",
-                "Andrea Esteban",
-                "No se quedan guardados los pedidos y estan intercambiados unos precios con otros",
-                "27/6/2019"
-
-            )
-        )
-         listTareas.add(
-            Tareas
-                (
-
-                "Usuario erroneo",
-                "Calle Obispo Hurtado" + "\n" + "Granada",
-                "Paco Rodriguez",
-                "Tengo un usuario creado con la aplicacón y no se guarda dicho usuario por extrañas razones",
-                "27/6/2019"
-            )
-        )
-        db!!.insert(listTareas)
-        listTareas.add(
-            Tareas
-                (
-                "La aplicación me parece racista",
-                "Avenida Andalucia" + "\n" + "Jaen",
-                "Ricardo Milos",
-                "Simplemente me parece racista porque las letras son blancas y no negras ",
-                "27/6/2019"
-
-            )
-        )
-        db!!.insert(listTareas)
-        listTareas.add(
-            Tareas(
-
-                "Fallo de conexión",
-                ": Calle Medina" + "\n" + "Jerez de la frontera,Cadiz",
-                "Camarón de la isla",
-                "Fallo al hacer conexión con la base de datos",
-                "27/6/2019"
-            )
-        )
-        db!!.insert(listTareas)
-    }*/
-
     fun inflater() {
 
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
-        val adapter =  AdapterTareas(this@MainActivity, list)
+        val adapter = AdapterTareas(this@MainActivity, list)
         recycleViewTareas.adapter = adapter
 
     }
-
-
 
 
     fun consult() {
@@ -183,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             val user: String = cursor.getString(3)
             val datee: String = cursor.getString(4)
             val description: String = cursor.getString(5)
-            list.add(Task(0,name, place, user, datee, description))
+            list.add(Task(0, name, place, user, datee, description))
 
         }
     }
