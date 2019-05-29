@@ -45,6 +45,24 @@ class Repository(context: Context) {
         val deletedRows = db.delete(ReadTask.Entry.TABLE_NAME, selection, arrayOf(task_name))
 
     }
+
+
+    fun updateTask(task_name: String , place : String,user:String,date:String,description:String){
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(ReadTask.Entry.COLUMN_TASK_NAME, place)
+            put(ReadTask.Entry.COLUMN_TASK_NAME, user)
+            put(ReadTask.Entry.COLUMN_TASK_NAME, date)
+            put(ReadTask.Entry.COLUMN_TASK_NAME, description)
+        }
+        val count = db.update(
+            ReadTask.Entry.TABLE_NAME,
+            values,
+            ReadTask.Entry.COLUMN_TASK_NAME+"=?",
+            arrayOf(task_name)
+        )
+        Log.i("actualizar", "Se consiguio actualizar$count")
+    }
     fun ReadCusor() {
         val projection = arrayOf(
             BaseColumns._ID, ReadTask.Entry.COLUMN_TASK_NAME, ReadTask.Entry.COLUMN_PLACE,

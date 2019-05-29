@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:background="#E91E63">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/etNombreProblemaEdit" android:textColor="@android:color/background_light"
+                android:singleLine="false" android:selectAllOnFocus="false"
+                android:hint="Introduzca el nombre de problema que quieras actualizar"
+                android:textColorHint="@android:color/background_light"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/etLugarTareaEdit" android:textColor="@android:color/background_light"
+                android:hint="Introduzca el lugar de la tienda  del problema"
+                android:textColorHint="@android:color/background_light"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/etPersonaTareaEdit" android:textColor="@android:color/background_light"
+                android:hint="Introduzca quien eres" android:textColorHint="@android:color/background_light"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/etDescripcionTareaEdit" android:textColor="@android:color/background_light"
+                android:hint="Introduzca descripcion" android:textColorHint="@android:color/background_light"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/etFechaTareaEdit" android:textColor="@android:color/background_light"
+                android:hint="Introduzca fecha de caducidad" android:textColorHint="@android:color/background_light"/>
+    </LinearLayout>
+    <Button
+            android:text="Actualizar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/bActualizarT" android:textSize="18sp"
+            android:fontFamily="monospace"/>
+    <Button
+            android:text="cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/cancelar" android:textSize="18sp"
+            android:fontFamily="monospace"/>
+</LinearLayout>

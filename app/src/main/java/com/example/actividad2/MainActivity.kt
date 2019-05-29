@@ -15,7 +15,8 @@ import com.example.actividad2.domain.TaskHelper
 import com.example.actividad2.presentation.adapter.AdapterTareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.formulario_eliminado.view.*
+import kotlinx.android.synthetic.main.formulario_actualizado.view.*
+
 import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
                     Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha)
-                    list.add(Task(0,nombre, lugar, usuario, descripcion, fecha))
+                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha))
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
@@ -65,12 +66,33 @@ class MainActivity : AppCompatActivity() {
 
         val buttonEliminar = findViewById<FloatingActionButton>(R.id.bEliminar)
         buttonEliminar.setOnClickListener {
-            val view: View = layoutInflater.inflate(R.layout.formulario_eliminado, null)
+            val view: View = layoutInflater.inflate(R.layout.formulario_actualizado, null)
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
-            view.bEliminarT.setOnClickListener {
-                val nombre = view.etEliminar.text.toString()
+            view.bActualizarT.setOnClickListener {
+                val nombre = view.etNombreProblemaEdit.text.toString()
+                val lugar = view.etLugarTareaEdit.text.toString()
+                val usuario = view.etPersonaTareaEdit.text.toString()
+                val fecha = view.etFechaTareaEdit.text.toString()
+                val descripcion = view.etDescripcionTareaEdit.text.toString()
+
+                if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
+                    && !descripcion.isEmpty() && !fecha.isEmpty()
+                ) {
+                    for(x in 0  until list.size) {
+                        if (list[x].name == nombre) {
+                            list.removeAt(x)
+                        }
+                    }
+                    Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
+                    list.add(Task(0,nombre,lugar,usuario,fecha,descripcion)
+
+                    )
+                }
+
+
+                /*val nombre = view.etEliminar.text.toString()
                 if (!nombre.isEmpty()) {
                     Repository(this).deleteTask(nombre)
                     for(x in 0  until list.size){
@@ -82,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
                     Toast.makeText(applicationContext, "El usuario Fue Eliminado", Toast.LENGTH_LONG).show()
 
-                }
+                }*/
 
                 showDialog.dismiss()
                 inflater()
@@ -95,7 +117,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
 
     fun inflater() {
