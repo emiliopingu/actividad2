@@ -1,5 +1,6 @@
 package com.example.actividad2
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.database.Cursor
 import android.support.v7.app.AppCompatActivity
@@ -17,22 +18,29 @@ import com.example.actividad2.data.Task
 import com.example.actividad2.domain.Repository
 import com.example.actividad2.domain.TaskHelper
 import com.example.actividad2.presentation.adapter.AdapterTareas
-import kotlinx.android.synthetic.main.activity_formulario_tarea.*
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 
 import java.util.*
 
+
 class MainActivity : AppCompatActivity() {
 
     var list: MutableList<Task> = ArrayList()
+    private var selectedYear = 0
+    private var selectedMonth = 0
+    private var selectedDay = 0
+
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val helper = TaskHelper(this)
         val db = helper.writableDatabase
         consult()
+
         inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -42,45 +50,64 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
-            val nombre = view.etNombreProblema.text.toString()
-            val lugar = view.etLugarTarea.text.toString()
-            val usuario = view.etPersonaTarea.text.toString()
-            val descripcion = view.etDescripcionTarea.text.toString()
-            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
+
+            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onSwiped(view1: RecyclerView.ViewHolder, position: Int) {
                     list.removeAt(view1.adapterPosition)
-                    val l =list[position]
+                    val l = list[position]
                     Repository(this@MainActivity).deleteTask(l.name)
                 }
 
-                override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
+                override fun onMove(
+                    p0: RecyclerView,
+                    p1: RecyclerView.ViewHolder,
+                    p2: RecyclerView.ViewHolder
+                ): Boolean {
                     return false
                 }
             }
             Log.i("eliminarItem", "hola$itemTouchHelper")
 
-            view.bDate.setOnClickListener{
-                val c:Calendar=Calendar.getInstance()
-                val day=c.get(Calendar.DAY_OF_MONTH)
-                val moth=c.get(Calendar.MONTH)
-                val year=c.get(Calendar.YEAR )
+            view.tvDate.setOnClickListener {
+                // get current date
+                val currentDate = Calendar.getInstance()
+                var year = currentDate.get(Calendar.YEAR)
+                var month = currentDate.get(Calendar.MONTH)
+                var day = currentDate.get(Calendar.DAY_OF_MONTH)
 
-                val date:DatePickerDialog= DatePickerDialog(this,DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDayOfMonth ->
-                    view.tvdate.text = "$mDayOfMonth/$mMonth/$mYear"
-                }, year, moth, day)
-                date.show()
+                if (view.tvDate.text.isNotEmpty()) {
+                    year = this.selectedYear
+                    month = this.selectedMonth
+                    day = this.selectedDay
+                }
+
+                // create listener
+                val listener =
+                    DatePickerDialog.OnDateSetListener { datePicker, selectedYear, selectedMonth, selectedDay ->
+                        this.selectedYear = selectedYear
+                        this.selectedMonth = selectedMonth
+                        this.selectedDay = selectedDay
+
+                        view.tvDate.text = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                    }
+
+                // create picker
+                val datePicker = DatePickerDialog(this, listener, year, month, day)
+                datePicker.show()
             }
-                    val fecha=view.tvdate.text.toString()
 
             view.bFormularioEnviar.setOnClickListener {
-
-
+                val nombre = view.etNombreProblema.text.toString()
+                val lugar = view.etLugarTarea.text.toString()
+                val usuario = view.etPersonaTarea.text.toString()
+                val descripcion = view.etDescripcionTarea.text.toString()
+                val fecha = view.tvDate.text.toString()
 
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha)
-                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha))
+                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
+                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha.toString()))
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
@@ -102,23 +129,54 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
+            view.editDate.setOnClickListener {
+                // get current date
+                val currentDate = Calendar.getInstance()
+                var year = currentDate.get(Calendar.YEAR)
+                var month = currentDate.get(Calendar.MONTH)
+                var day = currentDate.get(Calendar.DAY_OF_MONTH)
+
+                if (view.editDate.text.isNotEmpty()) {
+                    year = this.selectedYear
+                    month = this.selectedMonth
+                    day = this.selectedDay
+                }
+
+                // create listener
+                val listener =
+                    DatePickerDialog.OnDateSetListener { datePicker, selectedYear, selectedMonth, selectedDay ->
+                        this.selectedYear = selectedYear
+                        this.selectedMonth = selectedMonth
+                        this.selectedDay = selectedDay
+
+                        view.editDate.text = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                    }
+
+                // create picker
+                val datePicker = DatePickerDialog(this, listener, year, month, day)
+                datePicker.show()
+            }
+
+
+
             view.bActualizarT.setOnClickListener {
                 val nombre = view.etNombreProblemaEdit.text.toString()
                 val lugar = view.etLugarTareaEdit.text.toString()
                 val usuario = view.etPersonaTareaEdit.text.toString()
-                val fecha = view.etFechaTareaEdit.text.toString()
+                val fecha = view.editDate.text.toString()
                 val descripcion = view.etDescripcionTareaEdit.text.toString()
 
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    for(x in 0  until list.size) {
+                    for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
                             list.removeAt(x)
                         }
                     }
                     Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
-                    list.add(Task(0,nombre,lugar,usuario,fecha,descripcion)
+                    list.add(
+                        Task(0, nombre, lugar, usuario, fecha, descripcion)
 
                     )
                 }
@@ -138,7 +196,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     fun inflater() {
 
         val layoutManager = LinearLayoutManager(this@MainActivity)
@@ -148,9 +205,6 @@ class MainActivity : AppCompatActivity() {
         recycleViewTareas.adapter = adapter
 
     }
-
-
-
 
     fun consult() {
 

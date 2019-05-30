@@ -59,13 +59,23 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="80dp">
-        <EditText
+        <TextView
+                android:id="@+id/editDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/etFechaTareaEdit" android:textColor="@android:color/background_light"
-                android:hint="Introduzca fecha de caducidad" android:textColorHint="@android:color/background_light"/>
+                android:hint="Clicka para seleccionar fecha"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:padding="10dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                android:textColorHint="@android:color/white"
+                android:textColor="@android:color/white"
+                android:background="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
     </LinearLayout>
     <Button
             android:text="Actualizar"

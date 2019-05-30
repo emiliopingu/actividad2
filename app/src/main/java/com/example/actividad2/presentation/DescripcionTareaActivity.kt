@@ -1,5 +1,6 @@
 package com.example.actividad2.presentation
 
+import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.actividad2.R
@@ -8,6 +9,7 @@ import kotlinx.android.synthetic.main.tareas_list.*
 
 class DescripcionTareaActivity : AppCompatActivity() {
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_descripcion_tarea)
@@ -17,11 +19,11 @@ class DescripcionTareaActivity : AppCompatActivity() {
         val lugar = intent.getStringExtra("lugarDescripcion")
         val fecha = intent.getStringExtra("fechaDescripcion")
 
-        tvNombreDescripcion.text = problema
-        tvUsuario.text=usuario
-        tvLugarDescripcion.text=lugar
-        tvFechaDescripcion.text = fecha
-        tvDescripcionTarea.text = description
+        tvNombreDescripcion.text = "TITULO DEL PROBLEMA  \n $problema"
+        tvUsuario.text="USUARIO REMITENTE  \n $usuario"
+        tvLugarDescripcion.text="LUGAR DEL PROBLEMA \n $lugar"
+        tvFechaDescripcion.text = "FECHA CADUCIDAD \n $fecha"
+        tvDescripcionTarea.text = "DESCCRIPCION \n $description"
 
     }
 

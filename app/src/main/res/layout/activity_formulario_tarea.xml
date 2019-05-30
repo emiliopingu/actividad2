@@ -64,14 +64,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             <TextView
-                    android:text="TextView"
+                    android:id="@+id/tvDate"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/tvdate" android:layout_weight="1"
-                    android:textAlignment="center"/>
-            <Button
-                    android:text="fecha"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent" android:id="@+id/bDate"/>
+                    android:layout_height="match_parent"
+                    android:hint="Clicka para seleccionar fecha"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:padding="10dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:textColorHint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:background="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
         </LinearLayout>
     </LinearLayout>
     <Button
@@ -81,7 +89,7 @@
             android:background="@android:color/background_light" android:textStyle="italic"
             android:textAlignment="center" android:textSize="30sp"/>
     <Button
-            android:text="Button"
+            android:text="Cancelar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/buttonCancel"
             android:background="@android:color/background_light" android:textAlignment="center"
