@@ -48,7 +48,11 @@ class AdapterTareas(private val context: Context, var list: MutableList<Task>) :
             context.startActivity(intent1)
         }
     }
-
+    fun removeItem(position: Int) {
+        list.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, list.size)
+    }
     override fun getItemCount(): Int {
         return list.size
     }

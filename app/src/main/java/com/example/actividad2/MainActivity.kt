@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -23,6 +24,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 
 import java.util.*
+import android.support.v7.widget.RecyclerView.ViewHolder
+import android.view.ViewGroup
+import kotlinx.android.synthetic.main.tareas_list.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,14 +37,16 @@ class MainActivity : AppCompatActivity() {
     private var selectedDay = 0
 
 
+
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val helper = TaskHelper(this)
         val db = helper.writableDatabase
+        setRecyclerViewItemTouchListener()
         consult()
-
         inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -50,23 +56,6 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
 
-
-            val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                override fun onSwiped(view1: RecyclerView.ViewHolder, position: Int) {
-                    list.removeAt(view1.adapterPosition)
-                    val l = list[position]
-                    Repository(this@MainActivity).deleteTask(l.name)
-                }
-
-                override fun onMove(
-                    p0: RecyclerView,
-                    p1: RecyclerView.ViewHolder,
-                    p2: RecyclerView.ViewHolder
-                ): Boolean {
-                    return false
-                }
-            }
-            Log.i("eliminarItem", "hola$itemTouchHelper")
 
             view.tvDate.setOnClickListener {
                 // get current date
@@ -203,6 +192,11 @@ class MainActivity : AppCompatActivity() {
         recycleViewTareas.layoutManager = layoutManager
         val adapter = AdapterTareas(this@MainActivity, list)
         recycleViewTareas.adapter = adapter
+        val dividerItemDecoration = DividerItemDecoration(this , layoutManager.orientation)
+        recycleViewTareas.addItemDecoration(dividerItemDecoration)
+
+
+
 
     }
 
@@ -221,6 +215,29 @@ class MainActivity : AppCompatActivity() {
             list.add(Task(0, name, place, user, datee, description))
 
         }
+    }
+
+    private fun setRecyclerViewItemTouchListener() {
+
+
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
+
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+
+                val position = viewHolder.adapterPosition
+                list.removeAt(position)
+                recycleViewTareas.adapter!!.notifyItemRemoved(position)
+             Repository(this@MainActivity).deleteTask(list[position].name)
+
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView( recycleViewTareas)
     }
 }
 
