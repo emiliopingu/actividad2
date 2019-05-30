@@ -95,9 +95,26 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
-                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha.toString()))
-                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
+                    if (nombre.length in 31..3) {
+                        if (lugar.length in 31..0) {
+                            if (usuario.length in 21..0) {
+                                if (descripcion.length in 101..9) {
+                                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
+                                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha.toString()))
+                                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
+                                }else{
+                                    Toast.makeText(this,"La descripcion del problema debe de tener entre 100 y 10 caracteres",Toast.LENGTH_LONG).show()
+                                }
+                            }else{
+                                Toast.makeText(this,"El usuario debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
+                            }
+                        }else{
+                            Toast.makeText(this,"El lugar del problema debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
+                        }
+                    }else{
+                        Toast.makeText(this,"El nombre del problema debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
+                    }
+
                 } else {
                     Toast.makeText(this@MainActivity, "Rellene los campos", Toast.LENGTH_LONG).show()
                 }
@@ -156,22 +173,31 @@ class MainActivity : AppCompatActivity() {
                 val descripcion = view.etDescripcionTareaEdit.text.toString()
 
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
-                    && !descripcion.isEmpty() && !fecha.isEmpty()
-                ) {
-                    for (x in 0 until list.size) {
-                        if (list[x].name == nombre) {
-                            list.removeAt(x)
+                    && !descripcion.isEmpty() && !fecha.isEmpty())
+                {
+                    if (nombre.length in 31..3) {
+                        if (lugar.length in 31..0) {
+                            if (usuario.length in 21..0) {
+                                if (descripcion.length in 101..9) {
+                                    for (x in 0 until list.size) {
+                                        if (list[x].name == nombre) {
+                                            list.removeAt(x) } }
+                                    Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
+                                    list.add(
+                                        Task(0, nombre, lugar, usuario, fecha, descripcion))
+                                }else{
+                                    Toast.makeText(this,"La descripcion del problema debe de tener entre 100 y 10 caracteres",Toast.LENGTH_LONG).show()
+                                }
+                            }else{
+                                Toast.makeText(this,"El usuario debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
+                            }
+                        }else{
+                            Toast.makeText(this,"El lugar del problema debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
                         }
+                    }else{
+                        Toast.makeText(this,"El nombre del problema debe de tener entre 30 y 4 caracteres",Toast.LENGTH_LONG).show()
                     }
-                    Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
-                    list.add(
-                        Task(0, nombre, lugar, usuario, fecha, descripcion)
-
-                    )
                 }
-
-
-
 
                 showDialog.dismiss()
                 inflater()

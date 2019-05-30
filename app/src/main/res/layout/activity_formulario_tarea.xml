@@ -13,6 +13,7 @@
                 android:layout_height="match_parent"
                 android:inputType="textPersonName"
                 android:ems="10"
+                android:maxLength="20"
                 android:id="@+id/etNombreProblema" android:textColor="@android:color/background_light"
                 android:singleLine="false" android:selectAllOnFocus="false"
                 android:hint="Introduzca el nombre de problema"
@@ -27,6 +28,7 @@
                 android:layout_height="match_parent"
                 android:inputType="textPersonName"
                 android:ems="10"
+                android:maxLength="20"
                 android:id="@+id/etLugarTarea" android:textColor="@android:color/background_light"
                 android:hint="Introduzca el lugar de la tienda  del problem"
                 android:textColorHint="@android:color/background_light"/>
@@ -40,6 +42,7 @@
                 android:layout_height="match_parent"
                 android:inputType="textPersonName"
                 android:ems="10"
+                android:maxLength="20"
                 android:id="@+id/etPersonaTarea" android:textColor="@android:color/background_light"
                 android:hint="Introduzca quien eres" android:textColorHint="@android:color/background_light"/>
     </LinearLayout>
@@ -51,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textPersonName"
+                android:maxLength="20"
                 android:ems="10"
                 android:id="@+id/etDescripcionTarea" android:textColor="@android:color/background_light"
                 android:hint="Introduzca descripcion" android:textColorHint="@android:color/background_light"/>
@@ -69,6 +73,7 @@
                     android:layout_height="match_parent"
                     android:hint="Clicka para seleccionar fecha"
                     android:textAlignment="center"
+                    android:maxLength="20"
                     android:textSize="24sp"
                     android:padding="10dp"
                     android:paddingStart="30dp"
