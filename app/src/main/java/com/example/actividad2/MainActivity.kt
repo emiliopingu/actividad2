@@ -243,7 +243,7 @@ private fun setRecyclerViewItemTouchListener() {
                 if (position != 0) {
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
                     Repository(this@MainActivity).deleteTask(list[position - 1].name)
-
+//Cuandi es 0
                 }else if(position==0){
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
                     Repository(this@MainActivity).deleteTask(list[0].name)
