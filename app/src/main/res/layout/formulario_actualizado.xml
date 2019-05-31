@@ -53,7 +53,7 @@
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxLength="20"
+                android:maxLength="200"
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/etDescripcionTareaEdit" android:textColor="@android:color/background_light"

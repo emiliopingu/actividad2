@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textPersonName"
-                android:maxLength="20"
+                android:maxLength="200"
                 android:ems="10"
                 android:id="@+id/etDescripcionTarea" android:textColor="@android:color/background_light"
                 android:hint="Introduzca descripcion" android:textColorHint="@android:color/background_light"/>

@@ -222,7 +222,8 @@ fun consult() {
 }
 
 private fun setRecyclerViewItemTouchListener() {
-
+    val helper = TaskHelper(this)
+    val db = helper.writableDatabase
 
     val itemTouchCallback =
         object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -238,16 +239,12 @@ private fun setRecyclerViewItemTouchListener() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 
                 val position = viewHolder.adapterPosition
-                list.removeAt(position)
 
-                if (position != 0) {
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
-                    Repository(this@MainActivity).deleteTask(list[position - 1].name)
+                    Repository(this@MainActivity).deleteTask(list[position].name)
 //Cuandi es 0
-                }else if(position==0){
-                    recycleViewTareas.adapter!!.notifyItemRemoved(position)
-                    Repository(this@MainActivity).deleteTask(list[0].name)
-                }
+
+                list.removeAt(position)
             }
         }
 
