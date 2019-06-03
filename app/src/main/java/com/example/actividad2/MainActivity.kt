@@ -26,7 +26,11 @@ import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 import java.util.*
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
+import com.example.actividad2.api.RetrofitClient
 import kotlinx.android.synthetic.main.tareas_list.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private var selectedYear = 0
     private var selectedMonth = 0
     private var selectedDay = 0
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +97,15 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
+                    RetrofitClient.service.Insertartarea(nombre,lugar,usuario,descripcion,fecha).enqueue(object : Callback<Task> {
+                        override fun onFailure(call: Call<Task>, t: Throwable) {
+                           Log.i("fallo1","fallo la llamada")
+                        }
+                        override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                            Log.i("aciero","se realizo la llamada")
+                        }
 
+                    })
                     Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
                     list.add(Task(0, nombre, lugar, usuario, descripcion, fecha.toString()))
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
@@ -164,6 +177,16 @@ class MainActivity : AppCompatActivity() {
                             list.removeAt(x)
                         }
                     }
+                    RetrofitClient.service.borrarTareas(nombre,lugar,usuario,descripcion,fecha).enqueue(object:Callback<Task>{
+                        override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                            Log.i("aciero2","se realizo la llamada")
+                        }
+
+                        override fun onFailure(call: Call<Task>, t: Throwable) {
+                            Log.i("fallo2","fallo la llamada")
+                        }
+
+                    })
                     Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
                     list.add(
                         Task(0, nombre, lugar, usuario, fecha, descripcion)
