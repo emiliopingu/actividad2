@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         val helper = TaskHelper(this)
         val db = helper.writableDatabase
         setRecyclerViewItemTouchListener()
-        consult()
+        recogerDatos()
         inflater()
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -103,11 +103,12 @@ class MainActivity : AppCompatActivity() {
                         }
                         override fun onResponse(call: Call<Task>, response: Response<Task>) {
                             Log.i("aciero","se realizo la llamada")
+                            list.add(Task( nombre, lugar, usuario, descripcion, fecha.toString()))
                         }
 
                     })
-                    Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
-                    list.add(Task(0, nombre, lugar, usuario, descripcion, fecha.toString()))
+                   // Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
+
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
 
@@ -180,6 +181,9 @@ class MainActivity : AppCompatActivity() {
                     RetrofitClient.service.borrarTareas(nombre,lugar,usuario,descripcion,fecha).enqueue(object:Callback<Task>{
                         override fun onResponse(call: Call<Task>, response: Response<Task>) {
                             Log.i("aciero2","se realizo la llamada")
+                            list.add(
+                                Task( nombre, lugar, usuario, fecha, descripcion)
+                            )
                         }
 
                         override fun onFailure(call: Call<Task>, t: Throwable) {
@@ -187,10 +191,8 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     })
-                    Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
-                    list.add(
-                        Task(0, nombre, lugar, usuario, fecha, descripcion)
-                    )
+                   // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
+
                 } else {
                     Toast.makeText(
                         this,
@@ -227,7 +229,7 @@ fun inflater() {
 
 }
 
-fun consult() {
+/*fun consult() {
 
     val helper = TaskHelper(this)
     val db = helper.writableDatabase
@@ -242,7 +244,28 @@ fun consult() {
         list.add(Task(0, name, place, user, datee, description))
 
     }
+}*/
+    private fun recogerDatos(){
+    RetrofitClient.service.recogerTarea().enqueue(object :Callback<Task>{
+        override fun onResponse(call: Call<Task>, response: Response<Task>) {
+            if(response.isSuccessful){
+                for (x in 0 until list.size){
+                    val tarea=response.body()
+                    if (tarea != null) {
+                        list.add(Task(tarea.name,tarea.place,tarea.user,tarea.date,tarea.description))
+                    }
+                }
+
+            }
+        }
+
+        override fun onFailure(call: Call<Task>, t: Throwable) {
+      Log.i("falllo3","ha fallado en la conexion")
+        }
+
+    })
 }
+
 
 private fun setRecyclerViewItemTouchListener() {
     val helper = TaskHelper(this)

@@ -2,15 +2,12 @@ package com.example.actividad2.api
 
 import com.example.actividad2.data.Task
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface RegistrerApi {
     @FormUrlEncoded
-    @POST("tareas")
+    @POST("insertarDatos.php")
     fun Insertartarea(
         @Field("TaskName") name: String,
         @Field("TaskPlace") place: String,
@@ -19,7 +16,7 @@ interface RegistrerApi {
         @Field("DateOfExpiry") description: String
     ): Call<Task>
 
-    @DELETE("tareas")
+    @DELETE
     fun borrarTareas(
         @Field("TaskName") name: String,
         @Field("TaskPlace") place: String,
@@ -27,6 +24,9 @@ interface RegistrerApi {
         @Field("Description") date: String,
         @Field("DateOfExpiry") description: String
     ):Call<Task>
+
+    @GET("insertarDatos.php")
+    fun recogerTarea(): Call<Task>
 
 
 }

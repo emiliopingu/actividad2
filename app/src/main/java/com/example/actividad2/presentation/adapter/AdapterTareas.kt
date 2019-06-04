@@ -26,7 +26,6 @@ class AdapterTareas(private val context: Context, var list: MutableList<Task>) :
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
        val l=list[position]
-        val id =l.id
         val nombre =l.name
         val lugar =l.place
         val usuario =l.user

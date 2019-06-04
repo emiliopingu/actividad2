@@ -4,7 +4,6 @@ import android.provider.BaseColumns
 
 object ReadTask {
     object Entry : BaseColumns {
-        val _ID="0"
         const val TABLE_NAME = "Task"
         const val COLUMN_TASK_NAME = " TaskName"
         const val COLUMN_PLACE = "TaskPlace"

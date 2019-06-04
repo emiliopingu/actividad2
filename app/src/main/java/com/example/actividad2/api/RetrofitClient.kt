@@ -5,8 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.microedition.khronos.egl.EGL
 
 object RetrofitClient {
-
-    private const val url="http://localhost/phpmyadmin/sql.php?server=1&db=tareas&table=task&pos=0"
+    private const val locahost="127.0.0.1"
+    private const val url="http://$locahost/webservice/"
 
     var retrofit= Retrofit.Builder()
         .baseUrl(url)
