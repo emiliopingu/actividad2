@@ -32,6 +32,10 @@ import kotlinx.android.synthetic.main.tareas_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import jdk.nashorn.internal.runtime.ScriptingFunctions.readLine
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 
 
 @Suppress("DEPRECATION")
@@ -98,19 +102,20 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    RetrofitClient.service.Insertartarea(nombre, lugar, usuario, descripcion, fecha)
-                        .enqueue(object : Callback<Task> {
+                    RetrofitClient.service.insertTask(nombre, lugar, usuario, descripcion, fecha).enqueue(object : Callback<Task> {
                             override fun onFailure(call: Call<Task>, t: Throwable) {
                                 Log.i("fallo1", "fallo la llamada")
                             }
 
                             override fun onResponse(call: Call<Task>, response: Response<Task>) {
                                 Log.i("aciero", "se realizo la llamada")
+
+
                                 list.add(Task(nombre, lugar, usuario, descripcion, fecha.toString()))
                             }
 
                         })
-                    // Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
+
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
@@ -250,7 +255,7 @@ class MainActivity : AppCompatActivity() {
         }
     }*/
     fun callApi() {
-        RetrofitClient.service.getPeople().enqueue(object : Callback<List<Task>>{
+        RetrofitClient.service.getTask().enqueue(object : Callback<List<Task>>{
             override fun onResponse(call: Call<List<Task>>, response: Response<List<Task>>) {
                 Log.i("llamada1", "La llamada a la api ha funcionado")
                 if (response.isSuccessful) {
