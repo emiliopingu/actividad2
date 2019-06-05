@@ -1,11 +1,16 @@
 package com.example.actividad2.api
 
+import com.example.actividad2.data.All
 import com.example.actividad2.data.Task
 import retrofit2.Call
 import retrofit2.http.*
 
 
 interface RegistrerApi {
+
+    @GET("tareas.php") fun getPeople(): Call<List<Task>>
+
+
     @FormUrlEncoded
     @POST("insertarDatos.php")
     fun Insertartarea(
@@ -25,8 +30,6 @@ interface RegistrerApi {
         @Field("DateOfExpiry") description: String
     ):Call<Task>
 
-    @GET("insertarDatos.php")
-    fun recogerTarea(): Call<Task>
 
 
 }

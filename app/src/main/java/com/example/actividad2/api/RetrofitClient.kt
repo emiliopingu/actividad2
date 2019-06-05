@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.microedition.khronos.egl.EGL
 
 object RetrofitClient {
-    private const val locahost="127.0.0.1"
+    private const val locahost="192.168.1.5"
     private const val url="http://$locahost/webservice/"
 
     var retrofit= Retrofit.Builder()

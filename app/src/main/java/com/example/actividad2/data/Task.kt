@@ -1,12 +1,33 @@
 package com.example.actividad2.data
 
- class Task(
-     var name: String,
-     var place: String,
-     var user: String,
-     var date: String,
-     var description: String
- )
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+data class Task(
+
+    @SerializedName("TaskName")
+    @Expose
+    var name: String? = null,
+
+
+    @SerializedName("TaskPlace")
+    @Expose
+    var place: String? = null,
+
+
+    @SerializedName("TaskUser")
+    @Expose
+    var user: String? = null,
+
+
+    @SerializedName("DateOfExpiry")
+    @Expose
+    var date: String? = null,
+
+    @SerializedName("Description")
+    @Expose
+    var description: String? = null
+)
 
 
 

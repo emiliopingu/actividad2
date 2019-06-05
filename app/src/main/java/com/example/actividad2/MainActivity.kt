@@ -27,6 +27,7 @@ import java.util.*
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.ViewGroup
 import com.example.actividad2.api.RetrofitClient
+import com.example.actividad2.data.All
 import kotlinx.android.synthetic.main.tareas_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,13 +48,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val helper = TaskHelper(this)
-        Log.i("log","http://127.0.0.1/webservice/insertarDatos.php/")
-        Log.i("looog",RetrofitClient.service.recogerTarea().toString())
-
         setRecyclerViewItemTouchListener()
-        recogerDatos()
-        inflater()
+        callApi()
+
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
         button.setOnClickListener {
@@ -64,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
 
             view.tvDate.setOnClickListener {
-                // get current date
+
                 val currentDate = Calendar.getInstance()
                 var year = currentDate.get(Calendar.YEAR)
                 var month = currentDate.get(Calendar.MONTH)
@@ -101,17 +98,19 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    RetrofitClient.service.Insertartarea(nombre,lugar,usuario,descripcion,fecha).enqueue(object : Callback<Task> {
-                        override fun onFailure(call: Call<Task>, t: Throwable) {
-                           Log.i("fallo1","fallo la llamada")
-                        }
-                        override fun onResponse(call: Call<Task>, response: Response<Task>) {
-                            Log.i("aciero","se realizo la llamada")
-                            list.add(Task( nombre, lugar, usuario, descripcion, fecha.toString()))
-                        }
+                    RetrofitClient.service.Insertartarea(nombre, lugar, usuario, descripcion, fecha)
+                        .enqueue(object : Callback<Task> {
+                            override fun onFailure(call: Call<Task>, t: Throwable) {
+                                Log.i("fallo1", "fallo la llamada")
+                            }
 
-                    })
-                   // Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
+                            override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                                Log.i("aciero", "se realizo la llamada")
+                                list.add(Task(nombre, lugar, usuario, descripcion, fecha.toString()))
+                            }
+
+                        })
+                    // Repository(this).insertTask(nombre, lugar, usuario, descripcion, fecha.toString())
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
@@ -182,20 +181,21 @@ class MainActivity : AppCompatActivity() {
                             list.removeAt(x)
                         }
                     }
-                    RetrofitClient.service.borrarTareas(nombre,lugar,usuario,descripcion,fecha).enqueue(object:Callback<Task>{
-                        override fun onResponse(call: Call<Task>, response: Response<Task>) {
-                            Log.i("aciero2","se realizo la llamada")
-                            list.add(
-                                Task( nombre, lugar, usuario, fecha, descripcion)
-                            )
-                        }
+                    RetrofitClient.service.borrarTareas(nombre, lugar, usuario, descripcion, fecha)
+                        .enqueue(object : Callback<Task> {
+                            override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                                Log.i("aciero2", "se realizo la llamada")
+                                list.add(
+                                    Task(nombre, lugar, usuario, fecha, descripcion)
+                                )
+                            }
 
-                        override fun onFailure(call: Call<Task>, t: Throwable) {
-                            Log.i("fallo2","fallo la llamada")
-                        }
+                            override fun onFailure(call: Call<Task>, t: Throwable) {
+                                Log.i("fallo2", "fallo la llamada")
+                            }
 
-                    })
-                   // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
+                        })
+                    // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
 
                 } else {
                     Toast.makeText(
@@ -208,98 +208,99 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        showDialog.dismiss()
-        inflater()
-    }
-    view.cancelar.setOnClickListener{
-        showDialog.dismiss()
-    }
+                showDialog.dismiss()
+                inflater()
+            }
+            view.cancelar.setOnClickListener {
+                showDialog.dismiss()
+            }
 
 
-}
-
-}
-
-fun inflater() {
-
-    val layoutManager = LinearLayoutManager(this@MainActivity)
-    layoutManager.orientation = LinearLayoutManager.VERTICAL
-    recycleViewTareas.layoutManager = layoutManager
-    val adapter = AdapterTareas(this@MainActivity, list)
-    recycleViewTareas.adapter = adapter
-    val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-    recycleViewTareas.addItemDecoration(dividerItemDecoration)
-
-
-}
-
-/*fun consult() {
-
-    val helper = TaskHelper(this)
-    val db = helper.writableDatabase
-    val cursor: Cursor = db.rawQuery(" SELECT * FROM " + ReadTask.Entry.TABLE_NAME, null)
-    while (cursor.moveToNext()) {
-
-        val name: String = cursor.getString(1)
-        val place: String = cursor.getString(2)
-        val user: String = cursor.getString(3)
-        val datee: String = cursor.getString(4)
-        val description: String = cursor.getString(5)
-        list.add(Task(0, name, place, user, datee, description))
+        }
 
     }
-}*/
-    private fun recogerDatos(){
-    RetrofitClient.service.recogerTarea().enqueue(object :Callback<Task>{
-        override fun onResponse(call: Call<Task>, response: Response<Task>) {
-            if(response.isSuccessful){
-                for (x in 0 until list.size){
-                    val tarea=response.body()
-                    if (tarea != null) {
-                        list.add(Task(tarea.name,tarea.place,tarea.user,tarea.date,tarea.description))
+
+    fun inflater() {
+
+        val layoutManager = LinearLayoutManager(this@MainActivity)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        recycleViewTareas.layoutManager = layoutManager
+        val adapter = AdapterTareas(this@MainActivity, list)
+        recycleViewTareas.adapter = adapter
+        val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        recycleViewTareas.addItemDecoration(dividerItemDecoration)
+
+
+    }
+
+    /*fun consult() {
+
+        val helper = TaskHelper(this)
+        val db = helper.writableDatabase
+        val cursor: Cursor = db.rawQuery(" SELECT * FROM " + ReadTask.Entry.TABLE_NAME, null)
+        while (cursor.moveToNext()) {
+
+            val name: String = cursor.getString(1)
+            val place: String = cursor.getString(2)
+            val user: String = cursor.getString(3)
+            val datee: String = cursor.getString(4)
+            val description: String = cursor.getString(5)
+            list.add(Task(0, name, place, user, datee, description))
+
+        }
+    }*/
+    fun callApi() {
+        RetrofitClient.service.getPeople().enqueue(object : Callback<List<Task>>{
+            override fun onResponse(call: Call<List<Task>>, response: Response<List<Task>>) {
+                Log.i("llamada1", "La llamada a la api ha funcionado")
+                if (response.isSuccessful) {
+                    val lista=response.body()
+                    for (x in 0 until lista!!.size){
+                        list.add(Task(lista[x].name,lista[x].place,lista[x].user,lista[x].date,lista[x].description))
                     }
+                    inflater()
                 }
 
             }
-        }
 
-        override fun onFailure(call: Call<Task>, t: Throwable) {
-      Log.i("falllo3","ha fallado en la conexion")
-        }
-
-    })
-}
-
-
-private fun setRecyclerViewItemTouchListener() {
-    val helper = TaskHelper(this)
-    val db = helper.writableDatabase
-
-    val itemTouchCallback =
-        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                viewHolder1: RecyclerView.ViewHolder
-            ): Boolean {
-
-                return false
+            override fun onFailure(call: Call<List<Task>>, t: Throwable) {
+                Log.i("llamada2", "La llamada a la api no ha funcionado")
             }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 
-                val position = viewHolder.adapterPosition
+        })
+    }
+
+
+    private fun setRecyclerViewItemTouchListener() {
+        val helper = TaskHelper(this)
+        val db = helper.writableDatabase
+
+        val itemTouchCallback =
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    viewHolder1: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+
+                    val position = viewHolder.adapterPosition
 
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
-                    Repository(this@MainActivity).deleteTask(list[position].name)
+                    // Repository(this@MainActivity).deleteTask(list[position].name)
 //Cuandi es 0
 
-                list.removeAt(position)
+                    list.removeAt(position)
+                }
             }
-        }
 
-    val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
-    itemTouchHelper.attachToRecyclerView(recycleViewTareas)
-}
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recycleViewTareas)
+    }
 }
 
