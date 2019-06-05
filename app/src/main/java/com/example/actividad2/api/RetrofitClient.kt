@@ -11,9 +11,10 @@ object RetrofitClient {
     var retrofit= Retrofit.Builder()
         .baseUrl(url)
         .addConverterFactory(GsonConverterFactory.create())
-        .build()
+        .build()!!
 
-    var service = retrofit.create(RegistrerApi::class.java)
+    var service = retrofit.create(RegistrerApi::class.java)!!
+
 
 
 }

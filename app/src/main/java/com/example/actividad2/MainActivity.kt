@@ -33,6 +33,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     var list: MutableList<Task> = ArrayList()
@@ -45,8 +46,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val helper = TaskHelper(this)
-        val db = helper.writableDatabase
+        Log.i("log","http://127.0.0.1/webservice/insertarDatos.php/")
+        Log.i("looog",RetrofitClient.service.recogerTarea().toString())
+
         setRecyclerViewItemTouchListener()
         recogerDatos()
         inflater()

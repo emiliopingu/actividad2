@@ -9,11 +9,11 @@ interface RegistrerApi {
     @FormUrlEncoded
     @POST("insertarDatos.php")
     fun Insertartarea(
-        @Field("TaskName") name: String,
-        @Field("TaskPlace") place: String,
-        @Field("TaskUser") user: String,
-        @Field("Description") date: String,
-        @Field("DateOfExpiry") description: String
+        @Field("TaskName") nombre: String,
+        @Field("TaskPlace") lugar: String,
+        @Field("TaskUser") usuario: String,
+        @Field("Description") fecha: String,
+        @Field("DateOfExpiry") descripcion: String
     ): Call<Task>
 
     @DELETE
