@@ -6,12 +6,12 @@ require_once 'conexion.php';
  $stmt = $DBcon->prepare($query);
  $stmt->execute();
  
- $ArrayDeTareas = array();
+ $Tareas = array();
  
  while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
   
-  $ArrayDeTareas[] = $row;
+  $Tareas[] = $row;
  }
  
- echo json_encode($ArrayDeTareas);
+ echo json_encode($Tareas);
  ?>

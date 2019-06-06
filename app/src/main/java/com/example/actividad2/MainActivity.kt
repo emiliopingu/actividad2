@@ -2,7 +2,6 @@ package com.example.actividad2
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.database.Cursor
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -14,28 +13,19 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.example.actividad2.data.ReadTask
 import com.example.actividad2.data.Task
-import com.example.actividad2.domain.Repository
 import com.example.actividad2.domain.TaskHelper
 import com.example.actividad2.presentation.adapter.AdapterTareas
 import kotlinx.android.synthetic.main.activity_formulario_tarea.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
-
 import java.util.*
-import android.support.v7.widget.RecyclerView.ViewHolder
-import android.view.ViewGroup
 import com.example.actividad2.api.RetrofitClient
-import com.example.actividad2.data.All
-import kotlinx.android.synthetic.main.tareas_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import jdk.nashorn.internal.runtime.ScriptingFunctions.readLine
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+
+
 
 
 @Suppress("DEPRECATION")
@@ -110,12 +100,10 @@ class MainActivity : AppCompatActivity() {
                             override fun onResponse(call: Call<Task>, response: Response<Task>) {
                                 Log.i("aciero", "se realizo la llamada")
 
-
-                                list.add(Task(nombre, lugar, usuario, descripcion, fecha.toString()))
                             }
 
                         })
-
+                    list.add(Task(nombre, lugar, usuario, descripcion, fecha))
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
