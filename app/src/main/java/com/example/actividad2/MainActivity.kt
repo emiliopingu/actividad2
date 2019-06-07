@@ -98,11 +98,12 @@ class MainActivity : AppCompatActivity() {
 
                             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 Log.i("aciero", "se realizo la llamada")
-                                list.add(Task(nombre, lugar, usuario, fecha, descripcion))
+
 
                             }
 
                         })
+                    list.add(Task(nombre, lugar, usuario, fecha, descripcion))
                         inflater()
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
@@ -169,17 +170,13 @@ class MainActivity : AppCompatActivity() {
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
 
-                    for (x in 0 until list.size) {
-                        if (list[x].name == nombre) {
-                            list.removeAt(x)
-                        }
-                    }
+
                     RetrofitClient.service.updateTask(nombre,lugar, usuario, fecha,descripcion )
                             .enqueue(object : Callback<ResponseBody> {
                             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 Log.i("aciero2", "se realizo la llamada")
 
-                                inflater()
+
                                Toast.makeText(this@MainActivity, "Datos actualizados", Toast.LENGTH_LONG).show()
                             }
 
@@ -188,7 +185,12 @@ class MainActivity : AppCompatActivity() {
                             }
 
                         })
-
+                    for (x in 0 until list.size) {
+                        if (list[x].name == nombre) {
+                            list.removeAt(x)
+                        }
+                    }
+                    inflater()
                     // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
 
                 } else {
@@ -300,8 +302,8 @@ class MainActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                             Log.i("llamada6", "eliminado")
                             if (response.isSuccessful) {
-                                list.removeAt(position)
 
+                                Toast.makeText(this@MainActivity,"Ha sido eliminado",Toast.LENGTH_LONG).show()
                             }
 
                         }
@@ -312,6 +314,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     })
+                    list.removeAt(position)
                     inflater()
 
                 }
