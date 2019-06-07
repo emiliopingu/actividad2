@@ -1,13 +1,6 @@
 <?php
-require("conexion.php");
-
 
 $nombre = $_POST["nombre"];
-$lugar = $_POST["lugar"];
-$usuario = $_POST["usuario"];
-$fecha = $_POST["fecha"];
-$descripcion = $_POST["descripcion"];
-
 require("conexion.php");
 
 
@@ -22,9 +15,9 @@ mysqli_select_db($conexion, $bd) or die("No se encuentra la base de datos");
 mysqli_set_charset($conexion, "utf8");
 
 
-$registro = "UPDATE  tarea SET ( lugar='$lugar'
-usuario='$usuario',fecha='$fecha',descripcion='$descripcion') WHERE(nombre='$nombre'); ";
-  
+$registro = "delete from tarea where nombre='$nombre';";
+
+ 
 $resultados = mysqli_query($conexion, $registro);
 
 if($resultados == false){
@@ -36,5 +29,4 @@ if($resultados == false){
 }
 
 mysqli_close($conexion);
- 
 ?>

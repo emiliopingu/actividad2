@@ -2,7 +2,7 @@
 
 require 'conexion.php';
 
-//OBTENGO LOS DATOS DEL FORMULARIO
+
 
 $nombre = $_POST["nombre"];
 $lugar = $_POST["lugar"];
