@@ -98,11 +98,12 @@ class MainActivity : AppCompatActivity() {
 
                             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 Log.i("aciero", "se realizo la llamada")
+                                list.add(Task(nombre, lugar, usuario, fecha, descripcion))
 
                             }
 
                         })
-
+                        inflater()
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
@@ -168,24 +169,26 @@ class MainActivity : AppCompatActivity() {
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
 
-                    /*for (x in 0 until list.size) {
+                    for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
                             list.removeAt(x)
                         }
-                    }*/
-                    RetrofitClient.service.updateCliente(nombre, Task(lugar, usuario, descripcion, fecha))
-                            .enqueue(object : Callback<Task> {
-                            override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                    }
+                    RetrofitClient.service.updateTask(nombre,lugar, usuario, fecha,descripcion )
+                            .enqueue(object : Callback<ResponseBody> {
+                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 Log.i("aciero2", "se realizo la llamada")
-                              inflater()
+
+                                inflater()
                                Toast.makeText(this@MainActivity, "Datos actualizados", Toast.LENGTH_LONG).show()
                             }
 
-                            override fun onFailure(call: Call<Task>, t: Throwable) {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                 Log.i("fallo2", "fallo la llamada")
                             }
 
                         })
+
                     // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
 
                 } else {
@@ -298,7 +301,7 @@ class MainActivity : AppCompatActivity() {
                             Log.i("llamada6", "eliminado")
                             if (response.isSuccessful) {
                                 list.removeAt(position)
-                                inflater()
+
                             }
 
                         }
@@ -309,7 +312,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     })
-
+                    inflater()
 
                 }
             }

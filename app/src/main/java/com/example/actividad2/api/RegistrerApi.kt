@@ -33,7 +33,7 @@ interface RegistrerApi {
     ):Call<ResponseBody>
 
     @FormUrlEncoded
-    @PUT("actualizarDatos.php")
+    @POST("actualizarDatos.php")
     fun updateTask(
         @Field("nombre") nombre: String,
         @Field("lugar") lugar: String,
@@ -42,8 +42,7 @@ interface RegistrerApi {
         @Field("descripcion") descripcion: String
     ):Call<ResponseBody>
 
-    @PATCH("actualizarDatos.php/{nombre}/")
-    fun updateCliente(@Path("nombre") nombre: String, @Body tarea: Task): Call<Task>
+
 
     @FormUrlEncoded
     @POST("borrarDatos.php")
