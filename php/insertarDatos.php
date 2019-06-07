@@ -24,8 +24,7 @@ mysqli_select_db($conexion, $bd) or die("No se encuentra la base de datos");
 mysqli_set_charset($conexion, "utf8");
 
 
-$registro = "INSERT INTO tarea (nombre, lugar, 
-usuario,fecha,descripcion) VALUES ('$nombre', '$lugar', '$usuario' ,'$fecha' , '$descripcion'); ";
+$registro = "INSERT INTO tarea (nombre, lugar,usuario,fecha,descripcion) VALUES ('$nombre', '$lugar', '$usuario' ,'$fecha' , '$descripcion');";
   
 
 

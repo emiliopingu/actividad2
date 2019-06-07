@@ -22,8 +22,8 @@ mysqli_select_db($conexion, $bd) or die("No se encuentra la base de datos");
 mysqli_set_charset($conexion, "utf8");
 
 
-$registro = "UPDATE  tarea SET ( lugar='$lugar'
-usuario='$usuario',fecha='$fecha',descripcion='$descripcion') WHERE(nombre='$nombre'); ";
+//$registro = "UPDATE  tarea SET ( lugar='$lugar',usuario='$usuario',fecha='$fecha',descripcion='$descripcion') WHERE(nombre='$nombre'); ";
+$registro = "UPDATE  tarea SET lugar='$lugar',usuario='$usuario',fecha='$fecha',descripcion='$descripcion'  WHERE nombre='$nombre'; ";
   
 $resultados = mysqli_query($conexion, $registro);
 
