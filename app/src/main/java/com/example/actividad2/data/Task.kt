@@ -5,26 +5,26 @@ import com.google.gson.annotations.SerializedName
 
 data class Task(
 
-    @SerializedName("TaskName")
+    @SerializedName("nombre")
     @Expose
     var name: String? = null,
 
 
-    @SerializedName("TaskPlace")
+    @SerializedName("lugar")
     @Expose
     var place: String? = null,
 
 
-    @SerializedName("TaskUser")
+    @SerializedName("usuario")
     @Expose
     var user: String? = null,
 
 
-    @SerializedName("DateOfExpiry")
+    @SerializedName("fecha")
     @Expose
     var date: String? = null,
 
-    @SerializedName("Description")
+    @SerializedName("descripcion")
     @Expose
     var description: String? = null
 )

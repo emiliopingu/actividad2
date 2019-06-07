@@ -8,6 +8,12 @@ import retrofit2.Response
 import retrofit2.http.*
 import retrofit2.http.POST
 import retrofit2.http.FormUrlEncoded
+import okhttp3.ResponseBody
+import retrofit2.http.DELETE
+
+
+
+
 
 
 
@@ -17,24 +23,32 @@ interface RegistrerApi {
     @GET("tareas.php") fun getTask(): Call<List<Task>>
 
     @FormUrlEncoded
-    @POST("/insert.php")
+    @POST("insertarDatos.php")
     fun insertTask(
-        @Field("TaskName") name: String,
-        @Field("TaskPlace") place: String,
-        @Field("TaskUser") user: String,
-        @Field("Description") date: String,
-        @Field("DateOfExpiry") description: String
-    ):Call<Task>
+        @Field("nombre") nombre: String,
+        @Field("lugar") lugar: String,
+        @Field("usuario") usuario: String,
+        @Field("fecha") fecha: String,
+        @Field("descripcion") descripcion: String
+    ):Call<ResponseBody>
 
+    @FormUrlEncoded
+    @PUT("actualizarDatos.php")
+    fun updateTask(
+        @Field("nombre") nombre: String,
+        @Field("lugar") lugar: String,
+        @Field("usuario") usuario: String,
+        @Field("fecha") fecha: String,
+        @Field("descripcion") descripcion: String
+    ):Call<ResponseBody>
 
-    @DELETE
-    fun borrarTareas(
-        @Field("TaskName") name: String,
-        @Field("TaskPlace") place: String,
-        @Field("TaskUser") user: String,
-        @Field("Description") date: String,
-        @Field("DateOfExpiry") description: String
-    ):Call<Task>
+    @PATCH("actualizarDatos.php/{nombre}/")
+    fun updateCliente(@Path("nombre") nombre: String, @Body tarea: Task): Call<Task>
+
+    @FormUrlEncoded
+    @POST("borrarDatos.php")
+    fun deleteTask(@Field("nombre")nombre: String):Call<ResponseBody>
+
 
 
 

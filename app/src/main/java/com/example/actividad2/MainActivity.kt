@@ -21,11 +21,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 import java.util.*
 import com.example.actividad2.api.RetrofitClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
 
 
 @Suppress("DEPRECATION")
@@ -41,9 +40,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        setRecyclerViewItemTouchListener()
+        inflater()
         callApi()
+        setRecyclerViewItemTouchListener()
 
 
         val button = findViewById<FloatingActionButton>(R.id.bFormulario)
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
-
 
             view.tvDate.setOnClickListener {
 
@@ -92,18 +90,19 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    RetrofitClient.service.insertTask(nombre, lugar, usuario, descripcion, fecha).enqueue(object : Callback<Task> {
-                            override fun onFailure(call: Call<Task>, t: Throwable) {
+                    RetrofitClient.service.insertTask(nombre, lugar, usuario, fecha, descripcion)
+                        .enqueue(object : Callback<ResponseBody> {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                 Log.i("fallo1", "fallo la llamada")
                             }
 
-                            override fun onResponse(call: Call<Task>, response: Response<Task>) {
+                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                 Log.i("aciero", "se realizo la llamada")
 
                             }
 
                         })
-                    list.add(Task(nombre, lugar, usuario, descripcion, fecha))
+
 
                     Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
@@ -169,18 +168,17 @@ class MainActivity : AppCompatActivity() {
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
 
-                    for (x in 0 until list.size) {
+                    /*for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
                             list.removeAt(x)
                         }
-                    }
-                    RetrofitClient.service.borrarTareas(nombre, lugar, usuario, descripcion, fecha)
-                        .enqueue(object : Callback<Task> {
+                    }*/
+                    RetrofitClient.service.updateCliente(nombre, Task(lugar, usuario, descripcion, fecha))
+                            .enqueue(object : Callback<Task> {
                             override fun onResponse(call: Call<Task>, response: Response<Task>) {
                                 Log.i("aciero2", "se realizo la llamada")
-                                list.add(
-                                    Task(nombre, lugar, usuario, fecha, descripcion)
-                                )
+                              inflater()
+                               Toast.makeText(this@MainActivity, "Datos actualizados", Toast.LENGTH_LONG).show()
                             }
 
                             override fun onFailure(call: Call<Task>, t: Throwable) {
@@ -243,13 +241,21 @@ class MainActivity : AppCompatActivity() {
         }
     }*/
     fun callApi() {
-        RetrofitClient.service.getTask().enqueue(object : Callback<List<Task>>{
+        RetrofitClient.service.getTask().enqueue(object : Callback<List<Task>> {
             override fun onResponse(call: Call<List<Task>>, response: Response<List<Task>>) {
                 Log.i("llamada1", "La llamada a la api ha funcionado")
                 if (response.isSuccessful) {
-                    val lista=response.body()
-                    for (x in 0 until lista!!.size){
-                        list.add(Task(lista[x].name,lista[x].place,lista[x].user,lista[x].date,lista[x].description))
+                    val lista = response.body()
+                    for (x in 0 until lista!!.size) {
+                        list.add(
+                            Task(
+                                lista[x].name,
+                                lista[x].place,
+                                lista[x].user,
+                                lista[x].date,
+                                lista[x].description
+                            )
+                        )
                     }
                     inflater()
                 }
@@ -286,9 +292,25 @@ class MainActivity : AppCompatActivity() {
 
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
                     // Repository(this@MainActivity).deleteTask(list[position].name)
-//Cuandi es 0
+                    // Repository(this@MainActivity).deleteTask(list[position].name)
+                    RetrofitClient.service.deleteTask(list[position].name.toString()).enqueue(object : Callback<ResponseBody> {
+                        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            Log.i("llamada6", "eliminado")
+                            if (response.isSuccessful) {
+                                list.removeAt(position)
+                                inflater()
+                            }
 
-                    list.removeAt(position)
+                        }
+
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Log.i("llamada6", "La llamada a la api no ha funcionado")
+                        }
+
+
+                    })
+
+
                 }
             }
 

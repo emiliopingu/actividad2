@@ -1,7 +1,7 @@
 <?php
 require_once 'conexion.php';
  
- $query = "SELECT * FROM task";
+ $query = "SELECT * FROM tarea";
  
  $stmt = $DBcon->prepare($query);
  $stmt->execute();
