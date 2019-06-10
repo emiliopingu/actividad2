@@ -13,7 +13,7 @@
             android:id="@+id/bEliminar"
             app:backgroundTint="#673AB7" android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.684" android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.84" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/recycleViewTareas" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.757"/>
     <android.support.design.widget.FloatingActionButton
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/recycleViewTareas" app:layout_constraintVertical_bias="0.692"
-            app:layout_constraintHorizontal_bias="0.283"/>
+            app:layout_constraintHorizontal_bias="0.138"/>
     <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="610dp" android:id="@+id/recycleViewTareas"
@@ -37,4 +37,12 @@
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.076">
     </android.support.v7.widget.RecyclerView>
+    <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true" app:srcCompat="@android:drawable/ic_dialog_info"
+            android:id="@+id/elegirTiempo" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.498"
+            android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

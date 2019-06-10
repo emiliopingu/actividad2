@@ -29,7 +29,8 @@ interface RegistrerApi {
         @Field("lugar") lugar: String,
         @Field("usuario") usuario: String,
         @Field("fecha") fecha: String,
-        @Field("descripcion") descripcion: String
+        @Field("descripcion") descripcion: String,
+        @Field("fechaDeCaducidad") fechaDeCaducidad: String
     ):Call<ResponseBody>
 
     @FormUrlEncoded
@@ -39,7 +40,8 @@ interface RegistrerApi {
         @Field("lugar") lugar: String,
         @Field("usuario") usuario: String,
         @Field("fecha") fecha: String,
-        @Field("descripcion") descripcion: String
+        @Field("descripcion") descripcion: String,
+        @Field("fechaDeCaducidad") fechaDeCaducidad: String
     ):Call<ResponseBody>
 
 

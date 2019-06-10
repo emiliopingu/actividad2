@@ -26,7 +26,12 @@ data class Task(
 
     @SerializedName("descripcion")
     @Expose
-    var description: String? = null
+    var description: String? = null,
+
+    @SerializedName("fechaDeCaducidad")
+    @Expose
+    var fechaDeCaducidad: String? = null
+
 )
 
 
