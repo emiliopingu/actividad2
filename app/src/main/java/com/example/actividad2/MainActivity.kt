@@ -31,6 +31,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
 import java.text.SimpleDateFormat
 
 
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var builder: Notification.Builder
     private val channelId = "canal.1"
     private val description = "notificacion"
-
+    private var continuar = true
 
 
     @SuppressLint("SetTextI18n")
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             val view: View = layoutInflater.inflate(R.layout.activity_formulario_tarea, null)
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
-
+//fechaInicial
             view.tvDate.setOnClickListener {
 
                 val currentDate = Calendar.getInstance()
@@ -88,13 +89,14 @@ class MainActivity : AppCompatActivity() {
                         this.selectedMonth = selectedMonth
                         this.selectedDay = selectedDay
 
-                        view.tvDate.text = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                        view.tvDate.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                     }
 
                 // create picker
                 val datePicker = DatePickerDialog(this, listener, year, month, day)
                 datePicker.show()
             }
+ //fechaCaducidad
             view.tvDateCaducidad.setOnClickListener {
 
                 val currentDate = Calendar.getInstance()
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 var month = currentDate.get(Calendar.MONTH)
                 var day = currentDate.get(Calendar.DAY_OF_MONTH)
 
-                if (view.tvDate.text.isNotEmpty()) {
+                if (view.tvDateCaducidad.text.isNotEmpty()) {
                     year = this.selectedYear
                     month = this.selectedMonth
                     day = this.selectedDay
@@ -115,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                         this.selectedMonth = selectedMonth
                         this.selectedDay = selectedDay
 
-                        view.tvDate.text = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                        view.tvDateCaducidad.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                     }
 
                 // create picker
@@ -134,6 +136,70 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty() && !fechaCaducidad.isEmpty()
                 ) {
+                    val view: View = layoutInflater.inflate(R.layout.elegir_tiempo, null)
+                    val builder2 = AlertDialog.Builder(this).setView(view)
+                    val showDialog = builder2.show()
+                    view.tvCaducidad.setOnClickListener {
+                        val currentDate = Calendar.getInstance()
+                        var year = currentDate.get(Calendar.YEAR)
+                        var month = currentDate.get(Calendar.MONTH)
+                        var day = currentDate.get(Calendar.DAY_OF_MONTH)
+
+                        if (view.tvCaducidad.text.isNotEmpty()) {
+                            year = this.selectedYear
+                            month = this.selectedMonth
+                            day = this.selectedDay
+                        }
+
+                        // create listener
+                        val listener =
+                            DatePickerDialog.OnDateSetListener { datePicker, selectedYear, selectedMonth, selectedDay ->
+                                this.selectedYear = selectedYear
+                                this.selectedMonth = selectedMonth
+                                this.selectedDay = selectedDay
+
+                                view.tvCaducidad.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                            }
+
+                        // create picker
+                        val datePicker = DatePickerDialog(this, listener, year, month, day)
+                        datePicker.show()
+                    }
+
+                    view.enviarNotificacion.setOnClickListener {
+                        val fechaUsuario = view.tvCaducidad.text.toString()
+                        val formatter = SimpleDateFormat("dd/MM/yyyy")
+                        val tiempo = diferenciaDeFechas(fecha, fechaCaducidad)
+
+                        try {
+
+                            val dateUsuario = formatter.parse(fechaUsuario)
+                            val fechaLong = Math.abs(dateUsuario.time)
+
+                            Thread {
+                                while (continuar) {
+                                    for (x in 0 until tiempo) {
+                                        Thread.sleep(tiempo)
+                                        if (x == fechaLong) {
+                                            continuar = false
+                                        }
+                                    }
+                                }
+                                if (!continuar) {
+                                    notificacion(nombre, ((tiempo - fechaLong) / (60 * 60 * 1000)).toInt())
+                                }
+
+                            }
+                        } catch (e: ParseException) {
+                            e.printStackTrace()
+                        }
+
+
+
+
+                        showDialog.dismiss()
+                    }
+
                     RetrofitClient.service.insertTask(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
                         .enqueue(object : Callback<ResponseBody> {
                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -147,48 +213,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                         })
-                    list.add(Task(nombre, lugar, usuario, fecha, descripcion,fechaCaducidad))
-
-                    val view2: View = layoutInflater.inflate(R.layout.elegir_tiempo, null)
-                    val builder2 = AlertDialog.Builder(this).setView(view2)
-                    val showDialog = builder2.show()
-                     view2.tvCaducidad.setOnClickListener {
-                         val currentDate = Calendar.getInstance()
-                         var year = currentDate.get(Calendar.YEAR)
-                         var month = currentDate.get(Calendar.MONTH)
-                         var day = currentDate.get(Calendar.DAY_OF_MONTH)
-
-                         if (view.tvDate.text.isNotEmpty()) {
-                             year = this.selectedYear
-                             month = this.selectedMonth
-                             day = this.selectedDay
-                         }
-
-                         // create listener
-                         val listener =
-                             DatePickerDialog.OnDateSetListener { datePicker, selectedYear, selectedMonth, selectedDay ->
-                                 this.selectedYear = selectedYear
-                                 this.selectedMonth = selectedMonth
-                                 this.selectedDay = selectedDay
-
-                                 view.tvDate.text = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-                             }
-
-                         // create picker
-                         val datePicker = DatePickerDialog(this, listener, year, month, day)
-                         datePicker.show()
-                     }
-                    view2.enviarNotificacion.setOnClickListener {
-                        val fechaUsuario = view2.tvCaducidad.text.toString()
-
-                        val tiempo= diferenciaDeFechas(fecha,fechaCaducidad)
-                        val dateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy ", Locale.getDefault())
-                        val fecha = dateFormat.parse(fechaUsuario)
-                       val fechaLong= Math.abs(fecha.time)
-
-                      Thread
-
-                    }
+                    list.add(Task(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad))
 
 
 
@@ -355,7 +380,7 @@ class MainActivity : AppCompatActivity() {
                                 lista[x].fechaDeCaducidad
                             )
                         )
-                        diferenciaDeFechas(list[x].date!!, list[x].fechaDeCaducidad!!)
+
 
                     }
                     inflater()
@@ -421,8 +446,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-   fun notificacion(nombre: String, horas: Int) {
+    fun notificacion(nombre: String, horas: Int) {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -450,26 +474,36 @@ class MainActivity : AppCompatActivity() {
                 .setContentIntent(pendingIntent)
         }
         notificationManager.notify(1234, builder.build())
+
     }
 
-    fun diferenciaDeFechas(fechaInicio: String, fechaFinal: String) : Long {
-         var diferenciaDeTiempo: Long = 0
-        val dateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy ", Locale.getDefault())
-        val fi = dateFormat.parse(fechaInicio)
-        val ff = dateFormat.parse(fechaFinal)
-
-        //Parceas tus fechas en string a variables de tipo date se agrega un try catch porque si el formato declarado anteriormente no es igual a tu fecha obtendrás una excepción
+    fun diferenciaDeFechas(fechaInicio: String, fechaFinal: String): Long {
+        var diferenciaDeTiempo: Long = 0
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
 
 
-        //obtienes la diferencia de las fechas
-        diferenciaDeTiempo = Math.abs(ff.time - fi.time);
+        try {
 
-        //obtienes la diferencia en horas ya que la diferencia anterior esta en segundos
+            val dateInicio = formatter.parse(fechaInicio)
+            val dateFinal = formatter.parse(fechaFinal)
+            //Parceas tus fechas en string a variables de tipo date se agrega un try catch porque si el formato declarado anteriormente no es igual a tu fecha obtendrás una excepción
 
-        Log.e("Difference: ", diferenciaDeTiempo.toString())
+
+            //obtienes la diferencia de las fechas
+            diferenciaDeTiempo = Math.abs(dateInicio.time - dateFinal.time);
+
+            //obtienes la diferencia en horas ya que la diferencia anterior esta en segundos
+
+            Log.e("Difference: ", diferenciaDeTiempo.toString())
 
 
-            return diferenciaDeTiempo
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return diferenciaDeTiempo
+
+
     }
 }
 

@@ -30,7 +30,7 @@ interface RegistrerApi {
         @Field("usuario") usuario: String,
         @Field("fecha") fecha: String,
         @Field("descripcion") descripcion: String,
-        @Field("fechaDeCaducidad") fechaDeCaducidad: String
+        @Field("fechaCaducidad") fechaCaducidad: String
     ):Call<ResponseBody>
 
     @FormUrlEncoded
@@ -41,7 +41,7 @@ interface RegistrerApi {
         @Field("usuario") usuario: String,
         @Field("fecha") fecha: String,
         @Field("descripcion") descripcion: String,
-        @Field("fechaDeCaducidad") fechaDeCaducidad: String
+        @Field("fechaCaducidad") fechaCaducidad: String
     ):Call<ResponseBody>
 
 
