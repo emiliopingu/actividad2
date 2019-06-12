@@ -62,12 +62,12 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="143dp">
+            android:layout_height="wrap_content">
         <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:hint="Clicka para seleccionar fecha"
+                android:layout_height="wrap_content"
+                android:hint="Clicka para seleccionar fecha de creacion de tarea"
                 android:textAlignment="center"
                 android:maxLength="20"
                 android:textSize="24sp"
@@ -84,8 +84,8 @@
         <TextView
                 android:id="@+id/tvDateCaducidad"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:hint="Clicka para seleccionar fecha"
+                android:layout_height="wrap_content"
+                android:hint="Clicka para seleccionar fecha de caducidad"
                 android:textAlignment="center"
                 android:maxLength="20"
                 android:textSize="24sp"
