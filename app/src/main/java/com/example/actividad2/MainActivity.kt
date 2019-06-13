@@ -2,13 +2,16 @@ package com.example.actividad2
 
 import android.annotation.SuppressLint
 import android.app.*
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
@@ -35,6 +38,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Long.parseLong
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
@@ -53,15 +57,16 @@ class MainActivity : AppCompatActivity() {
     private val description = "notificacion"
     private var continuar = true
     var llamada: LlamadaAPI? = LlamadaAPI()
-    lateinit var alarmManager:AlarmManager
-    lateinit var context:Context
+    lateinit var alarmManager: AlarmManager
+    lateinit var context: Context
+    var callId=3
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        context=this
-        alarmManager=getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        context = this
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         inflater()
 
         setRecyclerViewItemTouchListener()
@@ -101,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 val datePicker = DatePickerDialog(this, listener, year, month, day)
                 datePicker.show()
             }
- //fechaCaducidad
+            //fechaCaducidad
             view.tvDateCaducidad.setOnClickListener {
 
                 val currentDate = Calendar.getInstance()
@@ -166,14 +171,23 @@ class MainActivity : AppCompatActivity() {
                                 this.selectedYear = selectedYear
                                 this.selectedMonth = selectedMonth
                                 this.selectedDay = selectedDay
+                                val intent=Intent(Intent.ACTION_INSERT_OR_EDIT)
+                                intent.type = "vnd.android.cusor.item/event"
 
+                                intent.putExtra(CalendarContract.Events.DTSTART, currentDate.timeInMillis)
+                                intent.putExtra(CalendarContract.Events.DTEND, currentDate.timeInMillis *60 *60 *1000)
+                                intent.putExtra(CalendarContract.Events.TITLE, nombre)
+                                intent.putExtra(CalendarContract.Events.DESCRIPTION, descripcion)
+                                intent.putExtra(CalendarContract.Events.CALENDAR_ID, callId)
+                                intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, "España/Madrid")
+
+                                startActivity(intent)
                                 view.tvCaducidad.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                             }
 
                         // create picker
                         val datePicker = DatePickerDialog(this, listener, year, month, day)
                         datePicker.show()
-
                         empezarAlarma(currentDate)
                     }
 
@@ -191,6 +205,7 @@ class MainActivity : AppCompatActivity() {
                      */
                     llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
                     list.add(Task(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad))
+
 
 
 
@@ -254,7 +269,7 @@ class MainActivity : AppCompatActivity() {
              *
              */
             view.bActualizarT.setOnClickListener {
-               //Pasar la informacion editText a String
+                //Pasar la informacion editText a String
                 val nombre = view.etNombreProblemaEdit.text.toString()
                 val lugar = view.etLugarTareaEdit.text.toString()
                 val usuario = view.etPersonaTareaEdit.text.toString()
@@ -265,7 +280,7 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    llamada?.llamadaParaActualizar(nombre,lugar,usuario,fecha, descripcion,"pepe2.1")
+                    llamada?.llamadaParaActualizar(nombre, lugar, usuario, fecha, descripcion, "pepe2.1")
 
                     for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
@@ -372,9 +387,9 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycleViewTareas)
     }
 
- fun empezarAlarma(c:Calendar) {
+    fun empezarAlarma(c: Calendar) {
 
-       val intent = Intent(this,Receiver::class.java)
+        val intent = Intent(this, Receiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         if (c.before(Calendar.getInstance())) {
@@ -382,7 +397,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
-     Log.i("alarma","la alarma ha empezado")
+        Log.i("alarma", "la alarma ha empezado")
     }
 
 
