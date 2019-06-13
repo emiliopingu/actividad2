@@ -9,6 +9,7 @@ $lugar = $_POST["lugar"];
 $usuario = $_POST["usuario"];
 $fecha = $_POST["fecha"];
 $descripcion = $_POST["descripcion"];
+$fechaCaducidad = $_POST["fechaCaducidad"];
 
 require("conexion.php");
 
@@ -24,9 +25,8 @@ mysqli_select_db($conexion, $bd) or die("No se encuentra la base de datos");
 mysqli_set_charset($conexion, "utf8");
 
 
-$registro = "INSERT INTO tarea (nombre, lugar,usuario,fecha,descripcion) VALUES ('$nombre', '$lugar', '$usuario' ,'$fecha' , '$descripcion');";
+$registro = "INSERT INTO tarea  VALUES ('$nombre', '$lugar', '$usuario' ,'$fecha' , '$descripcion', '$fechaCaducidad');";
   
-
 
 $resultados = mysqli_query($conexion, $registro);
 

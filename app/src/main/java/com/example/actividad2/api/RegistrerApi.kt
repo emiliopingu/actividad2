@@ -12,12 +12,6 @@ import okhttp3.ResponseBody
 import retrofit2.http.DELETE
 
 
-
-
-
-
-
-
 interface RegistrerApi {
 
     @GET("tareas.php") fun getTask(): Call<List<Task>>

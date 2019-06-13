@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 import java.util.*
 import com.example.actividad2.api.RetrofitClient
+import com.example.actividad2.data.LlamadaAPI
 import kotlinx.android.synthetic.main.elegir_tiempo.*
 import kotlinx.android.synthetic.main.elegir_tiempo.view.*
 import okhttp3.ResponseBody
@@ -48,17 +49,14 @@ class MainActivity : AppCompatActivity() {
     private val channelId = "canal.1"
     private val description = "notificacion"
     private var continuar = true
-
+    var llamada: LlamadaAPI? = LlamadaAPI()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
         inflater()
-        callApi()
+
         setRecyclerViewItemTouchListener()
 
 
@@ -125,6 +123,9 @@ class MainActivity : AppCompatActivity() {
                 datePicker.show()
             }
 
+            /**
+             * clicar el boton donde se envia la informacion al servidor y se crea la notificacion
+             */
             view.bFormularioEnviar.setOnClickListener {
                 val nombre = view.etNombreProblema.text.toString()
                 val lugar = view.etLugarTarea.text.toString()
@@ -165,7 +166,9 @@ class MainActivity : AppCompatActivity() {
                         val datePicker = DatePickerDialog(this, listener, year, month, day)
                         datePicker.show()
                     }
-
+                    /**
+                     * Insertar y crear la notificacion
+                     */
                     view.enviarNotificacion.setOnClickListener {
                         val fechaUsuario = view.tvCaducidad.text.toString()
                         val formatter = SimpleDateFormat("dd/MM/yyyy")
@@ -199,20 +202,15 @@ class MainActivity : AppCompatActivity() {
 
                         showDialog.dismiss()
                     }
-
-                    RetrofitClient.service.insertTask(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
-                        .enqueue(object : Callback<ResponseBody> {
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                Log.i("fallo1", "fallo la llamada")
-                            }
-
-                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                Log.i("aciero", "se realizo la llamada")
-
-
-                            }
-
-                        })
+                    /**Inserta x valores en la base de datos
+                     * @param nombre
+                     * @param lugar
+                     * @param usuario
+                     * @param fecha
+                     * @param descripcion
+                     *@param fechaCaducidad
+                     */
+                    llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
                     list.add(Task(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad))
 
 
@@ -234,9 +232,12 @@ class MainActivity : AppCompatActivity() {
                 showDialog.dismiss()
             }
         }
-
+        /** Accion donde se llama a layour bEliminar .Tiene incorporado un dayPickerDialog
+         *
+         */
         val buttonEliminar = findViewById<FloatingActionButton>(R.id.bEliminar)
         buttonEliminar.setOnClickListener {
+
             val view: View = layoutInflater.inflate(R.layout.formulario_actualizado, null)
             val builder = AlertDialog.Builder(this).setView(view)
             val showDialog = builder.show()
@@ -270,45 +271,31 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-
+            /** Accion cuando se pulse bActualizar
+             *
+             */
             view.bActualizarT.setOnClickListener {
+               //Pasar la informacion editText a String
                 val nombre = view.etNombreProblemaEdit.text.toString()
                 val lugar = view.etLugarTareaEdit.text.toString()
                 val usuario = view.etPersonaTareaEdit.text.toString()
                 val fecha = view.editDate.text.toString()
                 val descripcion = view.etDescripcionTareaEdit.text.toString()
-                val fechaCaducidad = view.tvDateCaducidad.text.toString()
+
 
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
-                    && !descripcion.isEmpty() && !fecha.isEmpty() && !fechaCaducidad.isEmpty()
+                    && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
+                    llamada?.llamadaParaActualizar(nombre,lugar,usuario,fecha, descripcion,"pepe2.1")
 
-
-                    RetrofitClient.service.updateTask(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
-                        .enqueue(object : Callback<ResponseBody> {
-                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                Log.i("aciero2", "se realizo la llamada")
-
-
-                                Toast.makeText(this@MainActivity, "Datos actualizados", Toast.LENGTH_LONG).show()
-                            }
-
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                Log.i("fallo2", "fallo la llamada")
-                            }
-
-                        })
                     for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
                             list.removeAt(x)
                         }
                     }
-
-
-
-
-
                     inflater()
+
+
                     // Repository(this).updateTask(nombre, lugar, usuario, fecha, descripcion)
 
                 } else {
@@ -334,8 +321,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /** Funcion para descargar los datos en el adapter y hacerlos visibles donde se le pasa una lista y un recycleView
+     *
+     */
     fun inflater() {
-
+        llamada?.callApi(list)
         val layoutManager = LinearLayoutManager(this@MainActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycleViewTareas.layoutManager = layoutManager
@@ -363,39 +353,13 @@ class MainActivity : AppCompatActivity() {
 
         }
     }*/
-    fun callApi() {
-        RetrofitClient.service.getTask().enqueue(object : Callback<List<Task>> {
-            override fun onResponse(call: Call<List<Task>>, response: Response<List<Task>>) {
-                Log.i("llamada1", "La llamada a la api ha funcionado")
-                if (response.isSuccessful) {
-                    val lista = response.body()
-                    for (x in 0 until lista!!.size) {
-                        list.add(
-                            Task(
-                                lista[x].name,
-                                lista[x].place,
-                                lista[x].user,
-                                lista[x].date,
-                                lista[x].description,
-                                lista[x].fechaDeCaducidad
-                            )
-                        )
+    /**funcion para recoger datos de la API
+     */
 
 
-                    }
-                    inflater()
-                }
-
-            }
-
-            override fun onFailure(call: Call<List<Task>>, t: Throwable) {
-                Log.i("llamada2", "La llamada a la api no ha funcionado")
-            }
-
-
-        })
-    }
-
+    /** Funcion para borrar las tareas arrastrandolas gracias al itemTouchCallBack
+     *
+     */
 
     private fun setRecyclerViewItemTouchListener() {
         val helper = TaskHelper(this)
@@ -419,23 +383,7 @@ class MainActivity : AppCompatActivity() {
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
                     // Repository(this@MainActivity).deleteTask(list[position].name)
                     // Repository(this@MainActivity).deleteTask(list[position].name)
-                    RetrofitClient.service.deleteTask(list[position].name.toString())
-                        .enqueue(object : Callback<ResponseBody> {
-                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                Log.i("llamada6", "eliminado")
-                                if (response.isSuccessful) {
-
-                                    Toast.makeText(this@MainActivity, "Ha sido eliminado", Toast.LENGTH_LONG).show()
-                                }
-
-                            }
-
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                Log.i("llamada6", "La llamada a la api no ha funcionado")
-                            }
-
-
-                        })
+                    llamada?.llamadaParaEliminar(list[position].name.toString())
                     list.removeAt(position)
                     inflater()
 
@@ -445,7 +393,11 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycleViewTareas)
     }
 
-
+    /**Funcion para crear la notificacion donde se le pasa las horas y el nombre
+     * @param nombre:String.Nombre de la tarea
+     * @param horas :Int
+     *
+     * */
     fun notificacion(nombre: String, horas: Int) {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -477,6 +429,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**Funcion para calcular la diferencia entre dos fechas*
+     * @param fechaInicio:String.Fecha inicial de la tarea en String donde luego se parsea en Date
+     * @param fechaFinal:String.Fecha final de la tarea en String donde luego se parsea en Date
+     * */
     fun diferenciaDeFechas(fechaInicio: String, fechaFinal: String): Long {
         var diferenciaDeTiempo: Long = 0
         val formatter = SimpleDateFormat("dd/MM/yyyy")

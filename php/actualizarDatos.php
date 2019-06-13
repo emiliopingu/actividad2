@@ -7,6 +7,8 @@ $lugar = $_POST["lugar"];
 $usuario = $_POST["usuario"];
 $fecha = $_POST["fecha"];
 $descripcion = $_POST["descripcion"];
+$fechaCaducidad = $_POST["fechaCaducidad"];
+
 
 require("conexion.php");
 
@@ -23,7 +25,7 @@ mysqli_set_charset($conexion, "utf8");
 
 
 //$registro = "UPDATE  tarea SET ( lugar='$lugar',usuario='$usuario',fecha='$fecha',descripcion='$descripcion') WHERE(nombre='$nombre'); ";
-$registro = "UPDATE  tarea SET lugar='$lugar',usuario='$usuario',fecha='$fecha',descripcion='$descripcion'  WHERE nombre='$nombre'; ";
+$registro = "UPDATE  tarea SET lugar='$lugar',usuario='$usuario',fecha='$fecha',descripcion='$descripcion',fechaCaducidad=$'fechaCaducidad'  WHERE nombre='$nombre'; ";
   
 $resultados = mysqli_query($conexion, $registro);
 
