@@ -2,6 +2,8 @@ package com.example.actividad2
 
 import android.annotation.SuppressLint
 import android.app.*
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -26,6 +28,7 @@ import kotlinx.android.synthetic.main.formulario_actualizado.view.*
 import java.util.*
 import com.example.actividad2.api.RetrofitClient
 import com.example.actividad2.data.LlamadaAPI
+import com.example.actividad2.data.Receiver
 import kotlinx.android.synthetic.main.elegir_tiempo.*
 import kotlinx.android.synthetic.main.elegir_tiempo.view.*
 import okhttp3.ResponseBody
@@ -50,11 +53,15 @@ class MainActivity : AppCompatActivity() {
     private val description = "notificacion"
     private var continuar = true
     var llamada: LlamadaAPI? = LlamadaAPI()
+    lateinit var alarmManager:AlarmManager
+    lateinit var context:Context
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        context=this
+        alarmManager=getSystemService(Context.ALARM_SERVICE) as AlarmManager
         inflater()
 
         setRecyclerViewItemTouchListener()
@@ -146,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                         var month = currentDate.get(Calendar.MONTH)
                         var day = currentDate.get(Calendar.DAY_OF_MONTH)
 
+
                         if (view.tvCaducidad.text.isNotEmpty()) {
                             year = this.selectedYear
                             month = this.selectedMonth
@@ -165,40 +173,11 @@ class MainActivity : AppCompatActivity() {
                         // create picker
                         val datePicker = DatePickerDialog(this, listener, year, month, day)
                         datePicker.show()
+
+                        empezarAlarma(currentDate)
                     }
-                    /**
-                     * Insertar y crear la notificacion
-                     */
+
                     view.enviarNotificacion.setOnClickListener {
-                        val fechaUsuario = view.tvCaducidad.text.toString()
-                        val formatter = SimpleDateFormat("dd/MM/yyyy")
-                        val tiempo = diferenciaDeFechas(fecha, fechaCaducidad)
-
-                        try {
-
-                            val dateUsuario = formatter.parse(fechaUsuario)
-                            val fechaLong = Math.abs(dateUsuario.time)
-
-                            Thread {
-                                while (continuar) {
-                                    for (x in 0 until tiempo) {
-                                        Thread.sleep(tiempo)
-                                        if (x == fechaLong) {
-                                            continuar = false
-                                        }
-                                    }
-                                }
-                                if (!continuar) {
-                                    notificacion(nombre, ((tiempo - fechaLong) / (60 * 60 * 1000)).toInt())
-                                }
-
-                            }
-                        } catch (e: ParseException) {
-                            e.printStackTrace()
-                        }
-
-
-
 
                         showDialog.dismiss()
                     }
@@ -393,41 +372,19 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycleViewTareas)
     }
 
-    /**Funcion para crear la notificacion donde se le pasa las horas y el nombre
-     * @param nombre:String.Nombre de la tarea
-     * @param horas :Int
-     *
-     * */
-    fun notificacion(nombre: String, horas: Int) {
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+ fun empezarAlarma(c:Calendar) {
 
-        val contentView = RemoteViews(packageName, R.layout.notificacion)
-        contentView.setTextViewText(R.id.tv_title, "NOTIFICACION FECHA DE CADUCIDAD")
-        contentView.setTextViewText(R.id.tv_content, "Ha la tarea " + nombre + " le queda " + horas + "horas")
+       val intent = Intent(this,Receiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.enableVibration(false)
-            notificationManager.createNotificationChannel(notificationChannel)
-
-            builder = Notification.Builder(this, channelId)
-                .setContent(contentView)
-                .setSmallIcon(R.drawable.navigation_empty_icon)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.navigation_empty_icon))
-                .setContentIntent(pendingIntent)
-        } else {
-
-            builder = Notification.Builder(this)
-                .setContent(contentView)
-                .setSmallIcon(R.drawable.navigation_empty_icon)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.navigation_empty_icon))
-                .setContentIntent(pendingIntent)
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1)
         }
-        notificationManager.notify(1234, builder.build())
 
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+     Log.i("alarma","la alarma ha empezado")
     }
+
 
     /**Funcion para calcular la diferencia entre dos fechas*
      * @param fechaInicio:String.Fecha inicial de la tarea en String donde luego se parsea en Date
