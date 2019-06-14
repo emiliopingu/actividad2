@@ -171,8 +171,8 @@ class MainActivity : AppCompatActivity() {
                                 this.selectedYear = selectedYear
                                 this.selectedMonth = selectedMonth
                                 this.selectedDay = selectedDay
-                                val intent=Intent(Intent.ACTION_INSERT_OR_EDIT)
-                                intent.type = "vnd.android.cusor.item/event"
+                                val intent=Intent(Intent.ACTION_EDIT)
+                                intent.type = "vnd.android.cursor.item/event"
 
                                 intent.putExtra(CalendarContract.Events.DTSTART, currentDate.timeInMillis)
                                 intent.putExtra(CalendarContract.Events.DTEND, currentDate.timeInMillis *60 *60 *1000)
@@ -180,14 +180,19 @@ class MainActivity : AppCompatActivity() {
                                 intent.putExtra(CalendarContract.Events.DESCRIPTION, descripcion)
                                 intent.putExtra(CalendarContract.Events.CALENDAR_ID, callId)
                                 intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, "España/Madrid")
+                                intent.putExtra(CalendarContract.Events.ACCESS_LEVEL, CalendarContract.Events.ACCESS_PRIVATE)
+                                intent.putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+
 
                                 startActivity(intent)
                                 view.tvCaducidad.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+
                             }
 
                         // create picker
                         val datePicker = DatePickerDialog(this, listener, year, month, day)
                         datePicker.show()
+                        llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
                         empezarAlarma(currentDate)
                     }
 
@@ -203,7 +208,7 @@ class MainActivity : AppCompatActivity() {
                      * @param descripcion
                      *@param fechaCaducidad
                      */
-                    llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
+
                     list.add(Task(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad))
 
 
