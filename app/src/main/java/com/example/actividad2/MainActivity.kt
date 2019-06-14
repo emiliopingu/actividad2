@@ -38,6 +38,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.lang.Long.parseLong
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     var llamada: LlamadaAPI? = LlamadaAPI()
     lateinit var alarmManager: AlarmManager
     lateinit var context: Context
-    var callId=3
+    var callId = 3
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         context = this
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         inflater()
-
         setRecyclerViewItemTouchListener()
 
 
@@ -171,17 +171,26 @@ class MainActivity : AppCompatActivity() {
                                 this.selectedYear = selectedYear
                                 this.selectedMonth = selectedMonth
                                 this.selectedDay = selectedDay
-                                val intent=Intent(Intent.ACTION_EDIT)
+                                val intent = Intent(Intent.ACTION_EDIT)
                                 intent.type = "vnd.android.cursor.item/event"
 
                                 intent.putExtra(CalendarContract.Events.DTSTART, currentDate.timeInMillis)
-                                intent.putExtra(CalendarContract.Events.DTEND, currentDate.timeInMillis *60 *60 *1000)
+                                intent.putExtra(
+                                    CalendarContract.Events.DTEND,
+                                    currentDate.timeInMillis * 60 * 60 * 1000
+                                )
                                 intent.putExtra(CalendarContract.Events.TITLE, nombre)
                                 intent.putExtra(CalendarContract.Events.DESCRIPTION, descripcion)
                                 intent.putExtra(CalendarContract.Events.CALENDAR_ID, callId)
                                 intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, "España/Madrid")
-                                intent.putExtra(CalendarContract.Events.ACCESS_LEVEL, CalendarContract.Events.ACCESS_PRIVATE)
-                                intent.putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+                                intent.putExtra(
+                                    CalendarContract.Events.ACCESS_LEVEL,
+                                    CalendarContract.Events.ACCESS_PRIVATE
+                                )
+                                intent.putExtra(
+                                    CalendarContract.Events.AVAILABILITY,
+                                    CalendarContract.Events.AVAILABILITY_BUSY
+                                )
 
 
                                 startActivity(intent)
@@ -192,7 +201,16 @@ class MainActivity : AppCompatActivity() {
                         // create picker
                         val datePicker = DatePickerDialog(this, listener, year, month, day)
                         datePicker.show()
-                        llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
+
+                        try {
+                            llamada?.llamadaParaInsertar(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad)
+                            Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
+                        } catch (e: IOException) {
+                            Toast.makeText(this@MainActivity, "No se ha guardado los datos", Toast.LENGTH_LONG).show()
+
+                        }
+                        Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
+
                         empezarAlarma(currentDate)
                     }
 
@@ -210,11 +228,6 @@ class MainActivity : AppCompatActivity() {
                      */
 
                     list.add(Task(nombre, lugar, usuario, fecha, descripcion, fechaCaducidad))
-
-
-
-
-                    Toast.makeText(this@MainActivity, "se ha guardado los datos", Toast.LENGTH_LONG).show()
 
 
                 } else {
@@ -285,13 +298,30 @@ class MainActivity : AppCompatActivity() {
                 if (!nombre.isEmpty() && !lugar.isEmpty() && !usuario.isEmpty()
                     && !descripcion.isEmpty() && !fecha.isEmpty()
                 ) {
-                    llamada?.llamadaParaActualizar(nombre, lugar, usuario, fecha, descripcion, "pepe2.1")
+                    if (llamada!!.llamadaParaActualizar(
+                            nombre,
+                            lugar,
+                            usuario,
+                            fecha,
+                            descripcion,
+                            "pepe2.1"
+                        ) != null
+                    ) {
+                        try{
+                            Toast.makeText(this@MainActivity, "Se ha actualizado la tarea", Toast.LENGTH_LONG)
+                        }catch (e: IOException){
+                            Toast.makeText(this@MainActivity, "No se ha actualizado la tarea", Toast.LENGTH_LONG)
+                        }
+
+                    }
+
 
                     for (x in 0 until list.size) {
                         if (list[x].name == nombre) {
                             list.removeAt(x)
                         }
                     }
+
                     inflater()
 
 
@@ -304,9 +334,6 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
-
-
-
 
                 showDialog.dismiss()
                 inflater()
@@ -382,8 +409,19 @@ class MainActivity : AppCompatActivity() {
                     recycleViewTareas.adapter!!.notifyItemRemoved(position)
                     // Repository(this@MainActivity).deleteTask(list[position].name)
                     // Repository(this@MainActivity).deleteTask(list[position].name)
-                    llamada?.llamadaParaEliminar(list[position].name.toString())
+                    try {
+                        llamada?.llamadaParaEliminar(list[position].name.toString())
+                        Toast.makeText(this@MainActivity, "Se ha eliminado la tarea", Toast.LENGTH_LONG)
+                    } catch (e: IOException) {
+                        Toast.makeText(this@MainActivity, "No se ha eliminado la tarea", Toast.LENGTH_LONG)
+                    }
+
+
                     list.removeAt(position)
+
+
+
+
                     inflater()
 
                 }
@@ -406,37 +444,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /**Funcion para calcular la diferencia entre dos fechas*
-     * @param fechaInicio:String.Fecha inicial de la tarea en String donde luego se parsea en Date
-     * @param fechaFinal:String.Fecha final de la tarea en String donde luego se parsea en Date
-     * */
-    fun diferenciaDeFechas(fechaInicio: String, fechaFinal: String): Long {
-        var diferenciaDeTiempo: Long = 0
-        val formatter = SimpleDateFormat("dd/MM/yyyy")
-
-
-        try {
-
-            val dateInicio = formatter.parse(fechaInicio)
-            val dateFinal = formatter.parse(fechaFinal)
-            //Parceas tus fechas en string a variables de tipo date se agrega un try catch porque si el formato declarado anteriormente no es igual a tu fecha obtendrás una excepción
-
-
-            //obtienes la diferencia de las fechas
-            diferenciaDeTiempo = Math.abs(dateInicio.time - dateFinal.time);
-
-            //obtienes la diferencia en horas ya que la diferencia anterior esta en segundos
-
-            Log.e("Difference: ", diferenciaDeTiempo.toString())
-
-
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-        return diferenciaDeTiempo
-
-
-    }
 }
 

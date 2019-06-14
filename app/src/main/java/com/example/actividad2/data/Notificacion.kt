@@ -38,7 +38,7 @@ class Notificacion(base: Context, val nombre:String) : ContextWrapper(base) {
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    private fun createChannel() {
+         fun createChannel() {
         val channel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH)
 
         manager!!.createNotificationChannel(channel)

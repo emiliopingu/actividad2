@@ -1,13 +1,17 @@
 package com.example.actividad2.data
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.actividad2.MainActivity
 import com.example.actividad2.api.RetrofitClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
+
+
 
 class LlamadaAPI {
 
@@ -24,6 +28,7 @@ class LlamadaAPI {
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.i("llamada6", "La llamada a la api no ha funcionado")
+
                 }
 
 
@@ -85,6 +90,7 @@ class LlamadaAPI {
 
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Log.i("aciero", "se realizo la llamada")
+
 
 
                 }
