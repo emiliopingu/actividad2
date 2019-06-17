@@ -430,6 +430,9 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycleViewTareas)
     }
 
+
+
+
     fun empezarAlarma(c: Calendar) {
 
         val intent = Intent(this, Receiver::class.java)
