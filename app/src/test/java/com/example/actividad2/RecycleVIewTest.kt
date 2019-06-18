@@ -1,13 +1,21 @@
 package com.example.actividad2
 
-import org.junit.Rule
 import org.junit.Test
 
+
 class RecycleVIewTest {
-    @Rule
-    val activity: Class<MainActivity> =(MainActivity::class.java)
 
 
-
-
+    @Test
+    fun greeterSaysHello() {
+        onView(withId(R.id.name_field)).perform(typeText("Steve"))
+        onView(withId(R.id.greet_button)).perform(click())
+        onView(withText("Hello Steve!")).check(matches(isDisplayed()))
+    }
 }
+
+
+
+
+
+
