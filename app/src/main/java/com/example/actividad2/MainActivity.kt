@@ -44,7 +44,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 
 
-@Suppress("DEPRECATION")
+
 class MainActivity : AppCompatActivity() {
 
     var list: MutableList<Task> = ArrayList()

@@ -6,10 +6,8 @@ import org.junit.Test
 class RecycleVIewTest {
     @Rule
     val activity: Class<MainActivity> =(MainActivity::class.java)
-     @Test
-     fun position(){
-         onView
-     }
+
+
 
 
 }

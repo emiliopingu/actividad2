@@ -8,11 +8,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.example.actividad2.data.Task
 import com.example.actividad2.presentation.adapter.AdapterTareas
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.runner.RunWith
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTestAndroid {
@@ -36,5 +38,11 @@ class MainActivityTestAndroid {
 
     @Test
     fun empezarAlarma() {
+        val c:Calendar= Calendar.getInstance()
+        assertNotNull(c)
+       val m= MainActivity()
+        assertNotNull(m.empezarAlarma(c))
+
+
     }
 }
