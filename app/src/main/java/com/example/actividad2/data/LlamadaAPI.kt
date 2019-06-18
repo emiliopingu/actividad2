@@ -12,7 +12,7 @@ import retrofit2.Response
 import java.util.ArrayList
 
 
-val main:MainActivity= MainActivity()
+
 class LlamadaAPI {
 
     fun llamadaParaEliminar(nombre:String){
@@ -21,14 +21,14 @@ class LlamadaAPI {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Log.i("llamada6", "eliminado")
                     if (response.isSuccessful) {
-            Toast.makeText(main.applicationContext,"Se ha eliminado",Toast.LENGTH_LONG)
+           // Toast.makeText(main.applicationContext,"Se ha eliminado",Toast.LENGTH_LONG)
                     }
 
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.i("llamada6", "La llamada a la api no ha funcionado")
-                    Toast.makeText(main.applicationContext,"No se ha eliminado",Toast.LENGTH_LONG)
+                 //   Toast.makeText(main.applicationContext,"No se ha eliminado",Toast.LENGTH_LONG)
                 }
 
 
@@ -39,13 +39,13 @@ class LlamadaAPI {
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Log.i("aciero2", "se ha acttualizado")
-                    Toast.makeText(main.applicationContext,"Se ha actualizado",Toast.LENGTH_LONG)
+                  //  Toast.makeText(main.applicationContext,"Se ha actualizado",Toast.LENGTH_LONG)
 
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.i("fallo2", "fallo la llamada")
-                    Toast.makeText(main.applicationContext,"No se ha actualizado",Toast.LENGTH_LONG)
+                   // Toast.makeText(main.applicationContext,"No se ha actualizado",Toast.LENGTH_LONG)
                 }
 
             })
@@ -87,12 +87,12 @@ class LlamadaAPI {
             .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.i("fallo1", "fallo la llamada")
-                    Toast.makeText(main.applicationContext,"No se ha insertado",Toast.LENGTH_LONG)
+                  //  Toast.makeText(main.applicationContext,"No se ha insertado",Toast.LENGTH_LONG)
                 }
 
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Log.i("aciero", "se realizo la llamada")
-                    Toast.makeText(main.applicationContext,"se ha insertado",Toast.LENGTH_LONG)
+                  //  Toast.makeText(main.applicationContext,"se ha insertado",Toast.LENGTH_LONG)
 
 
 

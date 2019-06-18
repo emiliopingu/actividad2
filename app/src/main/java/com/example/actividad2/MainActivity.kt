@@ -51,12 +51,6 @@ class MainActivity : AppCompatActivity() {
     private var selectedYear = 0
     private var selectedMonth = 0
     private var selectedDay = 0
-    lateinit var notificationManager: NotificationManager
-    lateinit var notificationChannel: NotificationChannel
-    lateinit var builder: Notification.Builder
-    private val channelId = "canal.1"
-    private val description = "notificacion"
-    private var continuar = true
     var llamada: LlamadaAPI? = LlamadaAPI()
     lateinit var alarmManager: AlarmManager
     lateinit var context: Context
@@ -363,22 +357,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*fun consult() {
 
-        val helper = TaskHelper(this)
-        val db = helper.writableDatabase
-        val cursor: Cursor = db.rawQuery(" SELECT * FROM " + ReadTask.Entry.TABLE_NAME, null)
-        while (cursor.moveToNext()) {
-
-            val name: String = cursor.getString(1)
-            val place: String = cursor.getString(2)
-            val user: String = cursor.getString(3)
-            val datee: String = cursor.getString(4)
-            val description: String = cursor.getString(5)
-            list.add(Task(0, name, place, user, datee, description))
-
-        }
-    }*/
     /**funcion para recoger datos de la API
      */
 
