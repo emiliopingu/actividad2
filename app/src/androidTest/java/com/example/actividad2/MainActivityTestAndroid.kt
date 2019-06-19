@@ -9,10 +9,12 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.rule.ActivityTestRule
 import com.example.actividad2.presentation.adapter.AdapterTareas
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Rule
 import java.util.*
+
 
 
 class MainActivityTestAndroid {
@@ -55,6 +57,6 @@ class MainActivityTestAndroid {
     }
     @Test
     fun dialog(){
-        
+        onView(allOf(withId(R.id.design_menu_item_text)))
     }
 }
