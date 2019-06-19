@@ -1,13 +1,14 @@
 package com.example.actividad2
-
 import android.app.AlarmManager
-
-import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.rule.ActivityTestRule
+import com.example.actividad2.presentation.adapter.AdapterTareas
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Rule
@@ -32,11 +33,8 @@ class MainActivityTestAndroid {
     @Test
     @Throws(Exception::class)
     fun clickItem() {
-        Espresso.onView(withId(R.id.recycleViewTareas)).perform(RecyclerViewActions.scrollToPosition(3))
+            onView(withId(R.id.recycleViewTareas)).perform(RecyclerViewActions.actionOnItemAtPosition<AdapterTareas.viewHolder>(0, ViewActions.click()))
     }
-
-
-
 
 
 
