@@ -1,25 +1,43 @@
 package com.example.actividad2
 
 import android.app.AlarmManager
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import com.example.actividad2.data.Task
-import com.example.actividad2.presentation.adapter.AdapterTareas
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 
+import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.rule.ActivityTestRule
+import org.junit.Test
 import org.junit.Assert.*
-import org.junit.runner.RunWith
+import org.junit.Rule
 import java.util.*
 
-@RunWith(AndroidJUnit4::class)
+
 class MainActivityTestAndroid {
 
-    val appContext = InstrumentationRegistry.getTargetContext()
+
+
+    @Rule
+    @JvmField
+    var activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
+
+    @Test
+    @Throws(Exception::class)
+    fun clickBotonCrearTarea() {
+        Espresso.onView(ViewMatchers.withId(R.id.bFormulario)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.bEliminar)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun clickItem() {
+        Espresso.onView(withId(R.id.recycleViewTareas)).perform(RecyclerViewActions.scrollToPosition(3))
+    }
+
+
+
+
 
 
     @Test
@@ -28,10 +46,7 @@ class MainActivityTestAndroid {
         assertNotNull(alarmManager)
     }
 
-    @Before
-    fun Context() {
-        assertNotNull(appContext)
-    }
+
 
 
 
