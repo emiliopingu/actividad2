@@ -45,10 +45,6 @@ class MainActivityTestAndroid {
     }
 
 
-
-
-
-
     @Test
     fun empezarAlarma() {
         val c:Calendar= Calendar.getInstance()
@@ -56,6 +52,9 @@ class MainActivityTestAndroid {
        val m= MainActivity()
         assertNotNull(m.empezarAlarma(c))
 
-
+    }
+    @Test
+    fun dialog(){
+        
     }
 }
