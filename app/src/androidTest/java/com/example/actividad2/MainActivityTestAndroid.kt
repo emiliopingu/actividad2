@@ -57,6 +57,24 @@ class MainActivityTestAndroid {
     }
     @Test
     fun dialog(){
-        onView(allOf(withId(R.id.design_menu_item_text)))
+        onView(allOf(withId(R.id.etNombreProblema)))
+
+        Espresso.onView(withId(R.id.bFormulario)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etNombreProblema)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etLugarTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etDescripcionTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etPersonaTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.tvDate)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.tvDateCaducidad)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+        Espresso.onView(withId(R.id.etNombreProblemaEdit)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etLugarTareaEdit)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etDescripcionTareaEdit)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.etPersonaTareaEdit)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.editDate)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+
+
+
     }
 }
