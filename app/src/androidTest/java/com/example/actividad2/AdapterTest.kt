@@ -21,9 +21,12 @@ import org.hamcrest.CoreMatchers.allOf
 import org.junit.Before
 import android.R
 import android.support.test.espresso.Espresso
+import android.support.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.rule.ActivityTestRule
+import kotlinx.android.synthetic.main.tareas_list.view.*
 
 
 class AdapterTest {
@@ -42,6 +45,10 @@ class AdapterTest {
     @Test
     fun recycleView(){
        onView(withId(com.example.actividad2.R.id.recycleViewTareas)).perform(RecyclerViewActions.actionOnItemAtPosition<AdapterTareas.viewHolder>(0, click()))
+        androidx.test.espresso.Espresso.onView(ViewMatchers.withId(com.example.actividad2.R.id.tvNombreTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        androidx.test.espresso.Espresso.onView(ViewMatchers.withId(com.example.actividad2.R.id.tvLugarTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        androidx.test.espresso.Espresso.onView(ViewMatchers.withId(com.example.actividad2.R.id.tvUsuarioTarea)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+   
     }
 
     @Before
